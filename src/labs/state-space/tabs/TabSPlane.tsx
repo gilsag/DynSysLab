@@ -6,6 +6,7 @@ import { SPlane, poleData, PZTool, ModeFlag } from '../components/SPlane';
 import { Plot } from '../components/Plot';
 import { C } from '../math/complex';
 import { circuitSS, Realization } from '../model';
+import { circuitDef } from '../circuits';
 import { eigenvalues, simulate, suggestHorizon, coAnalysis, tfPair, TF } from '../math/ss';
 import { fmt, tn, texPoly, texFactors, texComplex, round } from '../format';
 import { trimPoly } from '../math/poly';
@@ -49,16 +50,18 @@ export function TabSPlane() {
   const zerosSel = useMemo(() => (sys.kind === 'pz' ? sys.tfZeros : tfSel ? zerosOf(tfSel) : []), [sys, tfSel]);
 
   const loci = useMemo(() => {
-    if (sys.kind !== 'circuit' || st.circuit.locus === 'none') return undefined;
-    const key = st.circuit.locus;
-    const v0 = st.circuit[key];
+    const key = st.circuit.locus[st.circuit.id];
+    if (sys.kind !== 'circuit' || !key || key === 'none') return undefined;
+    const prm = circuitDef(st.circuit.id).params.find((q) => q.key === key);
+    if (!prm) return undefined;
+    const v0 = st.circuit.p[st.circuit.id][key];
     const pts: C[] = [];
-    const lo = key === 'R2' ? 0 : v0 / 4, hi = key === 'R2' ? Math.max(12, v0 * 2) : v0 * 4;
+    const lo = prm.log ? v0 / 4 : prm.min, hi = prm.log ? v0 * 4 : Math.max(prm.max * 0.6, v0 * 2.5);
     for (let k = 0; k <= 160; k++) {
-      const v = key === 'R2' ? lo + ((hi - lo) * k) / 160 : lo * Math.pow(hi / lo, k / 160);
-      pts.push(...eigenvalues(circuitSS({ ...st.circuit, [key]: v }).A));
+      const v = prm.log ? lo * Math.pow(hi / lo, k / 160) : lo + ((hi - lo) * k) / 160;
+      pts.push(...eigenvalues(circuitSS(st.circuit, { [key]: v }).A));
     }
-    return [{ pts, label: `${key} ↑` }];
+    return [{ pts, label: `${prm.tex.replace('_', '')} ↑` }];
   }, [sys.kind, st.circuit]);
 
   const co = useMemo(() => (sys.md.ok || sys.n ? coAnalysis(sys.ss, sys.md) : null), [sys]);

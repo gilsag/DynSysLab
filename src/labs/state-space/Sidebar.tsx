@@ -2,7 +2,9 @@ import { useApp, UIState } from './state';
 import { useT } from './i18n';
 import { Box, NumInput, Seg, Slider, Tex, Rich } from './components/basic';
 import { CircuitSVG } from './components/Circuit';
-import { matrixFromSS, pzFromBuilt, SourceKind, matrixFromPreset, matrixPresets, newRoot, orderOf, pzFromPreset, pzPresets, Realization, Root, MatrixState, defaultCircuit } from './model';
+import { matrixFromSS, pzFromBuilt, SourceKind, matrixFromPreset, matrixPresets, newRoot, orderOf, pzFromPreset, pzPresets, Realization, Root, MatrixState } from './model';
+import { CIRCUITS, circuitSystem, type CircuitId } from './circuits';
+import type { ReactNode } from 'react';
 import { fmt } from './format';
 import { MAX_ORDER } from './components/SPlane';
 
@@ -35,16 +37,27 @@ export function Sidebar() {
     else next.realization = 'source';
     set(next);
   };
+  const modes: { v: SourceKind; label: string; tip: string; icon: ReactNode; disabled?: boolean }[] = [
+    { v: 'matrix', label: t('side.srcMatrix'), tip: t('side.srcMatrixTip'), icon: ICONS.matrix },
+    { v: 'pz', label: t('side.srcPZ'), tip: !pzNext ? t('side.pzNeedsSiso') : t('side.srcPZTip'), icon: ICONS.pz, disabled: st.source !== 'pz' && !pzNext },
+    { v: 'circuit', label: t('side.srcCircuit'), tip: t('side.srcCircuitTip'), icon: ICONS.circuit },
+  ];
   return (
     <aside className="lab-sidebar">
       <Box kind="gray" title={t('side.source')}>
-        <Seg value={st.source === 'circuit' ? ('none' as SourceKind) : st.source} onChange={changeSource}
-          options={[{ v: 'pz', label: t('side.srcPZ'), disabled: st.source !== 'pz' && !pzNext, title: !pzNext ? t('side.pzNeedsSiso') : '' }, { v: 'matrix', label: t('side.srcMatrix') }]} />
+        <div className="src-switch" role="tablist" aria-label={t('side.source')}>
+          {modes.map((o) => (
+            <button key={o.v} role="tab" aria-selected={st.source === o.v} className={st.source === o.v ? 'on' : ''} disabled={o.disabled} title={o.tip} onClick={() => changeSource(o.v)}>
+              <span className="src-icon" aria-hidden="true">{o.icon}</span>
+              <span>{o.label}</span>
+            </button>
+          ))}
+        </div>
         <p className="hint">{t('side.sync')}</p>
         <div className="src-body">
           {st.source === 'pz' && <PZEditor />}
           {st.source === 'matrix' && <MatrixEditor />}
-          {st.source === 'circuit' && <p className="hint from-circuit">{t('side.fromCircuit')}</p>}
+          {st.source === 'circuit' && <CircuitEditor />}
         </div>
       </Box>
       <Box kind="blue" title={t('side.realization')}>
@@ -54,23 +67,32 @@ export function Sidebar() {
         {!sys.available.ccf && st.source !== 'pz' && <p className="hint muted">{t('real.mimoNote')}</p>}
         {!sys.available.modal && <p className="hint warn">{t('real.noModal')}</p>}
       </Box>
-      <Box kind={st.source === 'circuit' ? 'green' : 'plain'} title={t('side.circuitTitle')}
-        right={st.source === 'circuit' ? <span className="badge ok">{t('repr.working')}</span> : <button className="small" onClick={() => changeSource('circuit')}>{t('side.useCircuit')}</button>}>
-        {st.source === 'circuit' ? (
-          <>
-            <CircuitEditor />
-            <p className="hint">{t('side.syncCircuit')}</p>
-          </>
-        ) : (
-          <div className="circuit-off">
-            <CircuitSVG {...st.circuit} />
-            <p className="hint">{t('side.circuitIntro')}</p>
-          </div>
-        )}
-      </Box>
     </aside>
   );
 }
+
+const ICONS: Record<SourceKind, ReactNode> = {
+  matrix: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M7 4H4v16h3M17 4h3v16h-3" />
+      <circle cx="9" cy="9" r="0.9" fill="currentColor" /><circle cx="15" cy="9" r="0.9" fill="currentColor" />
+      <circle cx="9" cy="15" r="0.9" fill="currentColor" /><circle cx="15" cy="15" r="0.9" fill="currentColor" />
+    </svg>
+  ),
+  pz: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <path d="M3 12h18M12 3v18" opacity="0.35" />
+      <path d="M5 5l4 4M9 5l-4 4M5 15l4 4M9 15l-4 4" />
+      <circle cx="16.5" cy="12" r="2.6" />
+    </svg>
+  ),
+  circuit: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 8h3l1.5-3 3 6 3-6 3 6 1.5-3H22" />
+      <path d="M12 8v5M8 13h8M8 16h8M12 16v5" />
+    </svg>
+  ),
+};
 
 function RootRow({ r, onChange, onDelete }: { r: Root; onChange: (r: Root) => void; onDelete: () => void }) {
   return (
@@ -136,23 +158,36 @@ function CircuitEditor() {
   const { st, set } = useApp();
   const { t } = useT();
   const c = st.circuit;
-  const upd = (p: Partial<typeof c>) => set({ circuit: { ...c, ...p } });
+  const { def, p, out } = circuitSystem(c);
+  const outs = def.outputs(p);
+  const id = c.id;
+  const updP = (q: Record<string, number>) => set({ circuit: { ...c, p: { ...c.p, [id]: { ...c.p[id], ...q } } } });
+  const fmtU = (v: number, u: string) => `${fmt(v, 3)} ${u}`;
   return (
     <div className="circedit">
-      <CircuitSVG {...c} />
-      <Slider label={<Tex tex="R_1" />} value={c.R1} min={0.1} max={100} log onChange={(v) => upd({ R1: v })} fmtV={(v) => `${fmt(v, 3)} Ω`} />
-      <Slider label={<Tex tex="R_2" />} value={c.R2} min={0} max={30} step={0.1} onChange={(v) => upd({ R2: +v.toFixed(2) })} fmtV={(v) => `${fmt(v, 3)} Ω`} />
-      <Slider label={<Tex tex="C" />} value={c.C} min={0.005} max={2} log onChange={(v) => upd({ C: v })} fmtV={(v) => `${fmt(v, 3)} F`} />
-      <Slider label={<Tex tex="L" />} value={c.L} min={0.05} max={10} log onChange={(v) => upd({ L: v })} fmtV={(v) => `${fmt(v, 3)} H`} />
+      <label className="presets">
+        <span>{t('side.circuit')}</span>
+        <select value={id} onChange={(e) => set((s) => ({ circuit: { ...c, id: e.target.value as CircuitId }, fitKey: s.fitKey + 1 }))}>
+          {CIRCUITS.map((k) => <option key={k.id} value={k.id}>{t(`circ.${k.id}` as never)}</option>)}
+        </select>
+      </label>
+      <CircuitSVG id={id} output={out} />
+      <div className="circ-eq"><Tex tex={out.eq} /></div>
+      <p className="hint"><Rich text={t(`circ.note.${id}` as never)} /></p>
+      {def.params.map((q) => (
+        <Slider key={q.key} label={<Tex tex={q.tex} />} value={p[q.key]} min={q.min} max={q.max} log={q.log} step={q.log ? undefined : (q.max - q.min) / 300}
+          onChange={(v) => updP({ [q.key]: q.log ? v : +v.toFixed(2) })} fmtV={(v) => fmtU(v, q.unit)} />
+      ))}
       <div className="row"><span>{t('side.output')}</span>
-        <Seg small value={c.output} onChange={(v) => upd({ output: v })} options={[{ v: 'vC', label: <Tex tex="v_C" /> }, { v: 'iL', label: <Tex tex="i_L" /> }, { v: 'both', label: <Tex tex="[v_C\;i_L]^{\mathsf T}" /> }]} />
+        <Seg small value={out.key} onChange={(v) => set({ circuit: { ...c, output: { ...c.output, [id]: v } } })} options={outs.map((o) => ({ v: o.key, label: <Tex tex={o.tex} /> }))} />
       </div>
       <div className="row"><span>{t('side.locus')}</span>
-        <Seg small value={c.locus} onChange={(v) => upd({ locus: v })} options={[{ v: 'none', label: '—' }, { v: 'R1', label: <Tex tex="R_1" /> }, { v: 'R2', label: <Tex tex="R_2" /> }, { v: 'C', label: <Tex tex="C" /> }, { v: 'L', label: <Tex tex="L" /> }]} />
+        <Seg small value={c.locus[id]} onChange={(v) => set({ circuit: { ...c, locus: { ...c.locus, [id]: v } } })}
+          options={[{ v: 'none', label: '—' }, ...def.params.map((q) => ({ v: q.key, label: <Tex tex={q.tex} /> }))]} />
       </div>
       <div className="row btns">
-        <button className="small" onClick={() => set({ circuit: { ...defaultCircuit, output: c.output, locus: c.locus } })}>{t('side.caseA')}</button>
-        <button className="small" onClick={() => set({ circuit: { ...defaultCircuit, R2: 3, output: c.output, locus: c.locus } })}>{t('side.caseB')}</button>
+        {(def.cases ?? []).map((k) => <button key={k.key} className="small" onClick={() => updP(k.p)}>{t(k.key as never)}</button>)}
+        <button className="small" onClick={() => updP(Object.fromEntries(def.params.map((q) => [q.key, q.def])))}>{t('side.reset')}</button>
       </div>
     </div>
   );

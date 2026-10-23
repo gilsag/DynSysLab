@@ -1,6 +1,6 @@
 # Design guide · DynSysLab DIE-USM
 
-DynSysLab DIE-USM is the suite of interactive virtual labs for the Dynamic Systems courses (Departamento de Ingeniería Eléctrica, UTFSM). It currently holds six labs: variables de estado, series de Taylor y linealización, aproximación de funciones, convolución, series de Fourier and respuesta en frecuencia. This guide applies to all of them and to any new one. The reference app is the Fourier lab.
+DynSysLab DIE-USM is the suite of interactive virtual labs for the Dynamic Systems courses (Departamento de Ingeniería Eléctrica, UTFSM). It currently holds six labs, in this order: series de Taylor y linealización, convolución, aproximación de funciones, variables de estado, series de Fourier and respuesta en frecuencia. This guide applies to all of them and to any new one. The reference app is the Fourier lab.
 
 ## 1. Repository, stack and builds
 
@@ -8,7 +8,7 @@ One repository, one `package.json`: Vite + React + TypeScript, no UI framework, 
 
 Two kinds of build are required and both run in CI (`.github/workflows/deploy.yml`). `npm run build` makes `dist/`, which needs a web server. `npm run build:offline` makes `dist/offline/<page>.html`, one self-contained file per page (via `vite-plugin-singlefile`) that students open offline by double-clicking it; the files link to each other with relative paths. `import.meta.env.OFFLINE` is true in those builds. Never load anything from the network at run time (no Google Fonts, no CDNs).
 
-Designed for desktop and laptop screens and classroom projectors: `min-width: 1100px` on `.lab-app`, tested at 1280×800, 1366×768, 1440×900 and 1920×1080. Below 1000 px the layout falls back to one column.
+Designed first for desktop and laptop screens and classroom projectors (tested at 1280×800, 1366×768, 1440×900 and 1920×1080), and usable on tablets and phones. No minimum width. Below 1100 px multi-column tabs stack and wide content (formulas, matrices, tables) scrolls inside its card. From 701 to 999 px the sidebar narrows to about a third of the width. At 700 px and below (phones held upright) the header is compact (logo shield only, tools on their own line), tabs scroll sideways on one line, and the sidebar becomes a sheet at the bottom of the screen opened by the floating Controls button (`SidebarToggle` in `LabChrome.tsx`, CSS `.lab-fab` and `.sheet-open`). Short screens (phones sideways) also get one-line tabs. All of this is in `lab-theme.css`, so a new lab gets it by using `.lab-app`, `.lab-layout`, `.lab-sidebar`, `.lab-main` and `.tabs`. Interactive drawings use pointer events with `touch-action: none`; hover-only behaviour needs a tap equivalent (InfoTip toggles on tap; the Bode cursor follows a tap). Check every tab at 390×844 and 844×390 for horizontal overflow.
 
 ## 2. Shared code
 
@@ -75,9 +75,11 @@ Six languages, in this order: Español, English, Français, Deutsch, Italiano, P
 
 Umbrella name: DynSysLab DIE-USM, identical in every language. Lab titles follow one pattern: es "Laboratorio virtual de …", en "… Virtual Lab", fr "Laboratoire virtuel de …", de "Virtuelles Labor: …", it "Laboratorio virtuale di …", pt "Laboratório virtual de …", in sentence case. Titles live only in `SUITE_LABS` (`src/shared/suite.ts`); a lab passes `lab="<id>"` to `LabHeader`. A lab under construction passes `title` instead and is registered when it is ready, which adds it to the home page and to every lab's About list.
 
-Header: UTFSM DIE logo, separator, lab glyph (24×24 stroke icon drawn in `currentColor`, shown white on an accent square, registered in `GLYPHS`), suite name as a small line linking to the home page, lab title, subtitle (hidden on laptops). The browser tab reads "lab title · DynSysLab DIE-USM" in the current language; the static `<title>` in `<lab>.html` is the Spanish one. Favicon: the same glyph in white on a rounded square of `#2864d8`.
+Header: UTFSM DIE logo (cropped to its ink so its height matches the title block, linking to https://eli.usm.cl/), separator, lab glyph (24×24 stroke icon drawn in `currentColor`, shown white on an accent square, registered in `GLYPHS`), suite name as a small line linking to the home page, lab title, subtitle (hidden on laptops). The browser tab reads "lab title · DynSysLab DIE-USM" in the current language; the static `<title>` in `<lab>.html` is the Spanish one. Favicon: the same glyph in white on a rounded square of `#2864d8`.
 
-About: the header's About button opens a dialog with the suite description, links to the other labs, the author block (Esteban Gil, with his signature exactly as given) and the license (CC BY-NC 4.0). Change those texts only in `suite.ts` and `LabChrome.tsx`.
+About: the header's About button opens a dialog with the suite description, links to the other labs, the author block (Esteban Gil: positions, university and website; no phone, fax, e-mail or postal address anywhere in the labs) and the license (CC BY-NC 4.0). Change those texts only in `suite.ts` and `LabChrome.tsx`.
+
+Documentation: `README.md` in English only, with full translations in `README.es.md`, `README.fr.md`, `README.de.md`, `README.it.md` and `README.pt.md` (language links at the top of each); keep the six in sync. Per-lab notes in `src/labs/<lab>/README.md` are in English.
 
 License: `LICENSE` at the repository root (CC BY-NC 4.0; outputs generated by users are free for any use; React and KaTeX keep their MIT licenses; the university logos are not covered).
 

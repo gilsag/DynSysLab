@@ -1,34 +1,36 @@
 # DynSysLab DIE-USM
 
-Interactive virtual labs for linear dynamic systems, developed for the Dynamic Systems courses of the Departamento de Ingeniería Eléctrica, Universidad Técnica Federico Santa María (Chile).
+**English** · [Español](README.es.md) · [Français](README.fr.md) · [Deutsch](README.de.md) · [Italiano](README.it.md) · [Português](README.pt.md)
 
-*Laboratorios virtuales interactivos de sistemas dinámicos lineales para los cursos del Departamento de Ingeniería Eléctrica de la Universidad Técnica Federico Santa María.*
+Interactive virtual labs for dynamic systems, developed at the Department of Electrical Engineering of Universidad Técnica Federico Santa María (Chile).
+
+**Open the labs:** https://gilsag.github.io/DynSysLab/
 
 | Lab | Page | What it covers |
 |---|---|---|
-| Laboratorio virtual de variables de estado | `state-space.html` | Realizations, modes, phase portraits, change of coordinates, time response, controllability and observability |
-| Laboratorio virtual de series de Taylor y linealización | `taylor.html` | Partial sums and radius of convergence, tangent line, residual bound and range of validity, equilibria, Jacobian, classification and phase portrait of nonlinear second-order systems |
-| Laboratorio virtual de aproximación de funciones | `approximation.html` | Basic signals, squared error, normal equations and Gram matrix, orthogonality; pulses, steps, trigonometric basis, monomials and Legendre polynomials |
-| Laboratorio virtual de convolución | `convolution.html` | Graphical recipe (flip, shift, integrate) with segment changes, first and second Duhamel integrals, cascade and parallel connections |
-| Laboratorio virtual de series de Fourier | `fourier.html` | Harmonic decomposition, N-term approximation, Gibbs phenomenon, spectrum, phasors, LTI filtering, sound |
-| Laboratorio virtual de respuesta en frecuencia | `frequency.html` | s-plane poles and zeros, Bode plots with asymptotes and margins, Nyquist, time response, identification challenges |
+| Taylor Series and Linearization | `taylor.html` | Partial sums and radius of convergence, tangent line, residual bound and range of validity, equilibria, Jacobian, classification and phase portrait of nonlinear second-order systems |
+| Convolution | `convolution.html` | Graphical recipe (flip, shift, integrate) with segment changes, first and second Duhamel integrals, cascade and parallel connections |
+| Function Approximation | `approximation.html` | Basic signals, squared error, normal equations and Gram matrix, orthogonality; pulses, steps, trigonometric basis, monomials and Legendre polynomials |
+| State Space | `state-space.html` | System defined from matrices, poles and zeros, or an example circuit; realizations, modes, phase portraits, change of coordinates, time response, controllability and observability |
+| Fourier Series | `fourier.html` | Harmonic decomposition, N-term approximation, Gibbs phenomenon, spectrum, phasors, LTI filtering, sound |
+| Frequency Response | `frequency.html` | s-plane poles and zeros, Bode plots with asymptotes and margins, Nyquist, time response, identification challenges |
 
 Students can type their own functions in the Taylor, approximation and convolution labs; derivatives, Taylor coefficients and Jacobians are computed exactly from the formula. In the convolution lab only the input u(t) accepts free formulas: impulse responses are limited to those of linear systems (first and second order, integrator, a general ODE Q(D) y = P(D) u, and gain with pure delay).
 
-The home page (`index.html`) lists all labs. Every lab runs in the browser, in Spanish, English, French, German, Italian and Portuguese (browser language by default), with light and dark themes, four palettes (Blue, USM, Paper, High contrast) and adjustable text size for projection.
+The home page (`index.html`) lists all labs. Every lab runs in the browser, in Spanish, English, French, German, Italian and Portuguese (browser language by default), with light and dark themes, four palettes (Blue, USM, Paper, High contrast) and adjustable text size for projection. They also work on tablets and phones; on a phone the controls open from a button at the bottom of the screen.
 
 ## Use
 
 ```bash
 npm install
-npm run dev            # http://localhost:5173 (home page; labs at /fourier.html, /frequency.html, /state-space.html)
+npm run dev            # http://localhost:5173 (home page; each lab at /<lab>.html)
 npm test               # numerical tests
 npm run build          # static site in dist/ (needs a web server)
 npm run build:offline  # one self-contained HTML file per page in dist/offline/ (opens offline, double-click)
 npm run build:all      # both
 ```
 
-The offline files link to each other, so `dist/offline/` can be copied as a folder to a USB stick or uploaded to Moodle.
+The offline files link to each other, so `dist/offline/` can be copied as a folder to a USB stick or uploaded to a learning platform.
 
 ## Publishing on GitHub Pages
 
@@ -57,7 +59,7 @@ Shared code lives in `src/shared/` and is imported as `@shared/…`; a change th
 npm run new-lab -- root-locus    # creates src/labs/root-locus/ and root-locus.html from the template
 ```
 
-Build the lab following `DESIGN.md`. When it is ready, register it in `src/shared/suite.ts` (title and summary in six languages) and add its glyph to `GLYPHS` in `src/shared/LabChrome.tsx`; it then appears on the home page and in every lab's About dialog.
+Build the lab following `DESIGN.md`. When it is ready, register it in `src/shared/suite.ts` (title and summary in six languages; the order of the entries is the order shown to users) and add its glyph to `GLYPHS` in `src/shared/LabChrome.tsx`; it then appears on the home page and in every lab's About dialog.
 
 ## License
 
@@ -65,5 +67,4 @@ Copyright (c) 2026 Esteban Gil. Source code, interface, documentation and projec
 
 ## Author
 
-Esteban Gil, Department of Electrical Engineering, Universidad Técnica Federico Santa María · [esteban.gil@usm.cl](mailto:esteban.gil@usm.cl) · [sites.google.com/site/estebangil](https://sites.google.com/site/estebangil/)
-"# DynSysLab" 
+Esteban Gil, [Department of Electrical Engineering](https://eli.usm.cl/), Universidad Técnica Federico Santa María · [sites.google.com/site/estebangil](https://sites.google.com/site/estebangil/)

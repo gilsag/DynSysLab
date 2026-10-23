@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import type { BodeData, Factor, Margins } from '../math/tf';
 import { evalAt } from '../math/tf';
 import { niceLimits, pathOf, phaseTicks, linTicks, supDigits, useSize } from './plotUtils';
@@ -93,6 +94,7 @@ export default function BodePlot(p: Props) {
   const magTicks = linTicks(m0, m1, Math.max(3, Math.floor(ph1 / 40)));
   const phTicks = phaseTicks(q0, q1).filter((v, _i, arr) => arr.length < 9 || v % 90 === 0);
 
+  const lastPointer = useRef('mouse');
   const onMove = (e: React.PointerEvent) => {
     const rect = (e.currentTarget as SVGElement).getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -130,9 +132,14 @@ export default function BodePlot(p: Props) {
         width={W}
         height={H}
         className="bode"
-        onPointerMove={onMove}
-        onPointerLeave={() => !p.pinned && p.onHover(null)}
-        onClick={p.onPin}
+        onPointerMove={(e) => e.pointerType === 'mouse' && onMove(e)}
+        onPointerDown={(e) => {
+          // touch and pen: a tap chooses ω (there is no hover to follow, nor anything to pin)
+          lastPointer.current = e.pointerType;
+          if (e.pointerType !== 'mouse') onMove(e);
+        }}
+        onPointerLeave={(e) => e.pointerType === 'mouse' && !p.pinned && p.onHover(null)}
+        onClick={() => lastPointer.current === 'mouse' && p.onPin()}
         role="img"
         aria-label="Bode diagram"
       >

@@ -1,8 +1,8 @@
-# Laboratorio virtual de series de Fourier · DynSysLab DIE-USM
+# Fourier Series Virtual Lab · DynSysLab DIE-USM
 
 Part of DynSysLab DIE-USM. Run, build and offline instructions are in the README at the repository root; this page is served as `fourier.html`.
 
-Interactive Fourier series explorer for a Dynamic Systems course, Departamento de Ingeniería Eléctrica, UTFSM (Vite + React + TypeScript). The header logo is `src/shared/logo-utfsm-die.jpg`. UI in Spanish, English, French, German, Italian and Portuguese (selector in the header; the choice is remembered). Designed for desktop screens and projectors (minimum width 1100 px). Every section, metric and tab has an "i" tooltip explaining its purpose.
+Interactive Fourier series explorer for a Dynamic Systems course, Department of Electrical Engineering, UTFSM (Vite + React + TypeScript). The header logo is `src/shared/logo-utfsm-die.jpg`. UI in Spanish, English, French, German, Italian and Portuguese (selector in the header; the choice is remembered). Designed for desktop screens and projectors, and usable on tablets and phones. Every section, metric and tab has an "i" tooltip explaining its purpose.
 
 The microphone tab needs `localhost` or `https` (browser rule for `getUserMedia`); GitHub Pages is https. Everything else also works from the offline file.
 

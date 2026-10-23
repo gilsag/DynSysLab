@@ -354,20 +354,31 @@ textarea {
   gap: 12px;
   min-width: 0;
 }
+.lab-logo-link {
+  display: block;
+  flex: none;
+  line-height: 0;
+  border-radius: 6px;
+}
+.lab-logo-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+/* the image is cropped to its ink, so its height matches the title block next to it */
 .lab-logo {
-  height: 46px;
+  height: 48px;
   width: auto;
   display: block;
-  border-radius: 6px;
-  flex: none;
+  border-radius: 4px;
 }
 :root:not([data-theme='dark']) .lab-logo {
   mix-blend-mode: multiply;
 }
 :root[data-theme='dark'] .lab-logo {
   background: #fff;
-  padding: 4px 8px;
-  height: 50px;
+  padding: 3px 6px;
+  box-sizing: content-box;
+  height: 42px;
 }
 .lab-brand-sep {
   width: 1px;
@@ -547,10 +558,10 @@ a.lab-eyebrow:hover {
 /* laptop screens: tighter header */
 @media (max-width: 1440px), (max-height: 820px) {
   .lab-logo {
-    height: 40px;
+    height: 46px;
   }
   :root[data-theme='dark'] .lab-logo {
-    height: 44px;
+    height: 40px;
   }
   .lab-title {
     font-size: 1.15rem;
@@ -576,19 +587,24 @@ a.lab-eyebrow:hover {
   .lab-subtitle {
     display: none;
   }
+  .lab-logo {
+    height: 36px;
+  }
+  :root[data-theme='dark'] .lab-logo {
+    height: 32px;
+  }
 }
-/* narrow windows: single column, normal scrolling */
+/* tablets and phones held sideways: narrower sidebar */
 @media (max-width: 999px) {
   .lab-layout {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  .lab-sidebar {
-    position: static;
-    max-height: none;
-    overflow: visible;
+    grid-template-columns: minmax(240px, 34%) minmax(0, 1fr);
+    gap: 10px;
   }
   .lab-logo {
-    height: 34px;
+    height: 30px;
+  }
+  :root[data-theme='dark'] .lab-logo {
+    height: 26px;
   }
 }
 
@@ -1144,4 +1160,195 @@ input[type='radio'] {
 }
 .field select {
   color: var(--text);
+}
+
+
+/* ==========================================================================
+   Phones (portrait): compact header, sidebar as a bottom sheet
+   ========================================================================== */
+.lab-fab {
+  display: none;
+}
+/* wide formulas, matrices and tables scroll inside their card instead of widening the page */
+@media (max-width: 1100px) {
+  .lab-main .card,
+  .katex-display {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .lab-app {
+    overflow-x: clip;
+  }
+}
+@media (max-width: 700px) {
+  .lab-app {
+    padding: 8px 10px 84px;
+  }
+  .lab-topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 8px;
+  }
+  .lab-brand {
+    width: 100%;
+    gap: 8px;
+  }
+  .lab-brand-sep {
+    display: none;
+  }
+  /* only the shield of the logo */
+  .lab-logo,
+  :root[data-theme='dark'] .lab-logo {
+    height: 34px;
+    width: 44px;
+    object-fit: cover;
+    object-position: left center;
+  }
+  :root[data-theme='dark'] .lab-logo {
+    height: 30px;
+    width: 38px;
+    padding: 2px 3px;
+  }
+  .lab-glyph {
+    width: 28px;
+    height: 28px;
+  }
+  .lab-glyph svg {
+    width: 19px;
+    height: 19px;
+  }
+  .lab-title {
+    font-size: 1.02rem;
+  }
+  .lab-eyebrow {
+    font-size: 0.625rem;
+  }
+  .lab-tools {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  .lab-lang select {
+    min-width: 0;
+  }
+  .lab-menu-pop {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    top: var(--pop-top, 110px);
+    width: auto;
+    max-height: calc(100dvh - var(--pop-top, 110px) - 12px);
+    overflow-y: auto;
+  }
+  .lab-about-backdrop {
+    padding: 10px;
+  }
+  .lab-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* the sidebar becomes a sheet over the lower part of the screen */
+  .lab-sidebar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: auto;
+    z-index: 90;
+    max-height: 58dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 20px 10px 76px;
+    background: var(--bg);
+    border-top: 1px solid var(--border-strong);
+    border-radius: 14px 14px 0 0;
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.18);
+    transform: translateY(105%);
+    visibility: hidden;
+    transition: transform 0.22s ease, visibility 0s linear 0.22s;
+  }
+  .lab-sidebar::before {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: 50%;
+    width: 40px;
+    height: 4px;
+    margin-left: -20px;
+    border-radius: 2px;
+    background: var(--border-strong);
+  }
+  .sheet-open .lab-sidebar {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.22s ease;
+  }
+  .lab-fab {
+    display: inline-flex;
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    z-index: 95;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    border: none;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
+  }
+  .lab-fab svg {
+    width: 20px;
+    height: 20px;
+  }
+  /* tabs scroll sideways instead of wrapping */
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+  .tabs button {
+    flex: none;
+    white-space: nowrap;
+  }
+  .two-col {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .card {
+    padding: 10px 12px;
+  }
+  table {
+    max-width: 100%;
+  }
+  /* a growing item in a wrapping row takes the whole line */
+  .row.wrap > .grow {
+    flex: 1 1 100%;
+    min-width: 0;
+    order: -1;
+  }
+}
+
+/* phones held sideways: little height, so a tighter header and tabs on one scrolling line */
+@media (max-height: 500px) and (max-width: 999px) {
+  .lab-topbar {
+    padding-bottom: 4px;
+  }
+  .lab-title {
+    font-size: 1.02rem;
+  }
+  .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs button {
+    flex: none;
+    white-space: nowrap;
+  }
 }

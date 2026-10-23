@@ -108,7 +108,7 @@ export function texFactors(roots: C[], v = 's'): string {
       parts.push(r === 0 ? v : `(${v} ${r < 0 ? '+' : '-'} ${tn(Math.abs(r))})`);
     } else {
       const b = round(-2 * z.re), c = round(z.re * z.re + z.im * z.im);
-      parts.push(`(${v}^2 ${b === 0 ? '' : `${b < 0 ? '-' : '+'} ${tn(Math.abs(b))}${v}`} + ${tn(c)})`);
+      parts.push(`(${v}^2 ${b === 0 ? '' : `${b < 0 ? '-' : '+'} ${Math.abs(b) === 1 ? '' : tn(Math.abs(b))}${v}`} + ${tn(c)})`);
     }
     seen.push(z);
   }

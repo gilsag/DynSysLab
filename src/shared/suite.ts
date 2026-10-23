@@ -29,24 +29,6 @@ export interface LabInfo {
 
 /** Every published lab, in display order. The key is the folder in src/labs/ and the page name (<key>.html). */
 export const SUITE_LABS = {
-  'state-space': {
-    title: {
-      es: 'Laboratorio virtual de variables de estado',
-      en: 'State-Space Virtual Lab',
-      fr: 'Laboratoire virtuel de représentation d’état',
-      de: 'Virtuelles Labor: Zustandsraum',
-      it: 'Laboratorio virtuale di variabili di stato',
-      pt: 'Laboratório virtual de variáveis de estado',
-    },
-    summary: {
-      es: 'Realizaciones, modos, diagramas de fase, cambio de coordenadas, respuesta temporal, controlabilidad y observabilidad.',
-      en: 'Realizations, modes, phase portraits, change of coordinates, time response, controllability and observability.',
-      fr: 'Réalisations, modes, portraits de phase, changement de coordonnées, réponse temporelle, commandabilité et observabilité.',
-      de: 'Realisierungen, Moden, Phasenporträts, Koordinatenwechsel, Zeitantwort, Steuerbarkeit und Beobachtbarkeit.',
-      it: 'Realizzazioni, modi, ritratti di fase, cambio di coordinate, risposta temporale, controllabilità e osservabilità.',
-      pt: 'Realizações, modos, retratos de fase, mudança de coordenadas, resposta temporal, controlabilidade e observabilidade.',
-    },
-  },
   taylor: {
     title: {
       es: 'Laboratorio virtual de series de Taylor y linealización',
@@ -63,6 +45,24 @@ export const SUITE_LABS = {
       de: 'Partialsummen und Konvergenzradius, Tangente und Gültigkeitsbereich, Gleichgewichte, Jacobi-Matrix und Phasenporträt nichtlinearer Systeme.',
       it: 'Somme parziali e raggio di convergenza, retta tangente e intervallo di validità, equilibri, jacobiano e ritratto di fase di sistemi non lineari.',
       pt: 'Somas parciais e raio de convergência, reta tangente e faixa de validade, equilíbrios, jacobiano e diagrama de fase de sistemas não lineares.',
+    },
+  },
+  convolution: {
+    title: {
+      es: 'Laboratorio virtual de convolución',
+      en: 'Convolution Virtual Lab',
+      fr: 'Laboratoire virtuel de convolution',
+      de: 'Virtuelles Labor: Faltung',
+      it: 'Laboratorio virtuale di convoluzione',
+      pt: 'Laboratório virtual de convolução',
+    },
+    summary: {
+      es: 'La receta gráfica (reflejar, desplazar, integrar), integrales de Duhamel con escalones e impulsos, respuesta de sistemas en cascada y en paralelo.',
+      en: 'The graphical recipe (flip, shift, integrate), Duhamel integrals with steps and impulses, response of systems in cascade and in parallel.',
+      fr: 'La recette graphique (retourner, décaler, intégrer), intégrales de Duhamel avec échelons et impulsions, systèmes en cascade et en parallèle.',
+      de: 'Das grafische Verfahren (spiegeln, verschieben, integrieren), Duhamel-Integrale mit Sprüngen und Impulsen, Reihen- und Parallelschaltung.',
+      it: 'La ricetta grafica (ribaltare, traslare, integrare), integrali di Duhamel con gradini e impulsi, sistemi in cascata e in parallelo.',
+      pt: 'A receita gráfica (refletir, deslocar, integrar), integrais de Duhamel com degraus e impulsos, sistemas em cascata e em paralelo.',
     },
   },
   approximation: {
@@ -83,22 +83,22 @@ export const SUITE_LABS = {
       pt: 'Sinais básicos, erro quadrático, equações normais e matriz de Gram, ortogonalidade, pulsos, degraus, base trigonométrica e polinômios.',
     },
   },
-  convolution: {
+  'state-space': {
     title: {
-      es: 'Laboratorio virtual de convolución',
-      en: 'Convolution Virtual Lab',
-      fr: 'Laboratoire virtuel de convolution',
-      de: 'Virtuelles Labor: Faltung',
-      it: 'Laboratorio virtuale di convoluzione',
-      pt: 'Laboratório virtual de convolução',
+      es: 'Laboratorio virtual de variables de estado',
+      en: 'State-Space Virtual Lab',
+      fr: 'Laboratoire virtuel de représentation d’état',
+      de: 'Virtuelles Labor: Zustandsraum',
+      it: 'Laboratorio virtuale di variabili di stato',
+      pt: 'Laboratório virtual de variáveis de estado',
     },
     summary: {
-      es: 'La receta gráfica (reflejar, desplazar, integrar), integrales de Duhamel con escalones e impulsos, respuesta de sistemas en cascada y en paralelo.',
-      en: 'The graphical recipe (flip, shift, integrate), Duhamel integrals with steps and impulses, response of systems in cascade and in parallel.',
-      fr: 'La recette graphique (retourner, décaler, intégrer), intégrales de Duhamel avec échelons et impulsions, systèmes en cascade et en parallèle.',
-      de: 'Das grafische Verfahren (spiegeln, verschieben, integrieren), Duhamel-Integrale mit Sprüngen und Impulsen, Reihen- und Parallelschaltung.',
-      it: 'La ricetta grafica (ribaltare, traslare, integrare), integrali di Duhamel con gradini e impulsi, sistemi in cascata e in parallelo.',
-      pt: 'A receita gráfica (refletir, deslocar, integrar), integrais de Duhamel com degraus e impulsos, sistemas em cascata e em paralelo.',
+      es: 'Sistemas definidos desde matrices, polos y ceros o circuitos; realizaciones, modos, diagramas de fase, cambio de coordenadas, respuesta temporal, controlabilidad y observabilidad.',
+      en: 'Systems defined from matrices, poles and zeros, or circuits; realizations, modes, phase portraits, change of coordinates, time response, controllability and observability.',
+      fr: 'Systèmes définis par des matrices, des pôles et zéros ou des circuits ; réalisations, modes, portraits de phase, changement de coordonnées, réponse temporelle, commandabilité et observabilité.',
+      de: 'Systeme aus Matrizen, Polen und Nullstellen oder Schaltungen; Realisierungen, Moden, Phasenporträts, Koordinatenwechsel, Zeitantwort, Steuerbarkeit und Beobachtbarkeit.',
+      it: 'Sistemi definiti da matrici, poli e zeri o circuiti; realizzazioni, modi, ritratti di fase, cambio di coordinate, risposta temporale, controllabilità e osservabilità.',
+      pt: 'Sistemas definidos por matrizes, polos e zeros ou circuitos; realizações, modos, retratos de fase, mudança de coordenadas, resposta temporal, controlabilidade e observabilidade.',
     },
   },
   fourier: {
@@ -152,9 +152,7 @@ export const AUTHOR = {
     [{ t: 'Full Professor - ' }, { t: 'Department of Electrical Engineering', href: 'https://eli.usm.cl/' }],
     [{ t: 'Researcher - ' }, { t: 'Advanced Center for Electrical and Electronic Engineering (AC3E)', href: 'http://ac3e.usm.cl/en/' }],
     [{ t: 'Researcher - Innovation Center for Sustainable Energy Transition (SET)' }],
-    [{ t: 'Universidad Técnica Federico Santa María' }],
-    [{ t: 'Avenida España 1680, Casilla 110-V  |  Valparaíso, CHILE' }],
-    [{ t: 'Phone: 56 32 2654395  |  Fax: 56 32 2654594  |  ' }, { t: 'esteban.gil@usm.cl', href: 'mailto:esteban.gil@usm.cl' }],
+    [{ t: 'Universidad Técnica Federico Santa María, Valparaíso, Chile' }],
     [{ t: 'Website: ' }, { t: 'https://sites.google.com/site/estebangil/', href: 'https://sites.google.com/site/estebangil/' }],
   ] as { t: string; href?: string }[][],
 };

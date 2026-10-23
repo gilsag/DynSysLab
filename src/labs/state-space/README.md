@@ -1,34 +1,43 @@
-# Laboratorio virtual de variables de estado · DynSysLab DIE-USM
+# State-Space Virtual Lab · DynSysLab DIE-USM
 
-Parte de DynSysLab DIE-USM. Las instrucciones para ejecutar, compilar y generar la versión sin conexión están en el README de la raíz del repositorio; esta página se sirve como `state-space.html`.
+Part of DynSysLab DIE-USM. Run, build and offline instructions are in the README at the repository root; this page is served as `state-space.html`.
 
-Aplicación web interactiva (Vite + React + TypeScript) para un curso de sistemas dinámicos lineales: representación en variables de estado, polos y ceros, modos, diagramas de fase, cambio de coordenadas, controlabilidad y observabilidad. Interfaz en español, inglés, portugués, francés, italiano y alemán. Diseñada para computador (ancho mínimo 1100 px); el menú Apariencia agranda el texto para proyectar en clases.
+Interactive web app (Vite + React + TypeScript) for a linear dynamic systems course: state-space representation, poles and zeros, modes, phase portraits, change of coordinates, controllability and observability. Interface in Spanish, English, Portuguese, French, Italian and German. Designed for desktop screens and projectors, and usable on tablets and phones; the Display menu enlarges the text for projection.
 
-## Contenido
+## Content
 
-Dos formas enlazadas de definir el sistema (panel lateral): polos y ceros de G(s) (hasta orden 8), o matrices A, B, C, D escritas a mano (hasta n = 8, m = 3, p = 3). Ambas formas describen el mismo sistema: al pasar de una a otra se traslada el sistema actual. Aparte, un circuito RLC de segundo orden (con lugar de los polos al variar un parámetro) puede usarse como ejemplo físico; tiene parámetros propios y sólo actúa como origen. La realización de trabajo (forma canónica controlable, observable, modal o la de la fuente) se usa en todas las pestañas.
+The switch at the top of the sidebar chooses how the system is defined:
 
-| Pestaña | Qué muestra |
+- **Matrices**: A, B, C, D typed by hand (up to n = 8, m = 3, p = 3).
+- **Poles & zeros** of G(s) (single input, single output, up to order 8).
+- **Circuit**: an example electric circuit with its own parameters, whose capacitor voltages and inductor currents are the state variables. Five circuits are available: first-order RC, series RLC, two-mesh RLC, two-stage RC ladder and a third-order LC filter (Butterworth with the default values). Each one offers several outputs (including outputs with D ≠ 0) and the pole locus when one parameter varies.
+
+Matrices and Poles & zeros describe the same system: switching between them carries the current system over. Choosing Circuit replaces the system with the circuit's. The working realization (controllable, observable, modal canonical form, or the source's own) is used in every tab.
+
+| Tab | What it shows |
 |---|---|
-| Polos y ceros | Plano s editable (arrastrar, agregar pares, borrar, adherencia), matrices que se iluminan al cambiar, G(s), tabla de modos, respuesta a escalón |
-| Representación | Cadena EDO de orden n → n EDO de primer orden → forma vectorial; las realizaciones disponibles; matriz T entre ellas; grafo de flujo de señales |
-| Diagrama de fase | Campo vectorial, familia de trayectorias, direcciones propias, animación, comparación con coordenadas modales, plano traza-determinante, descomposición modal en el tiempo |
-| Cambio de coordenadas | Base {t₁, t₂} arrastrable, A_z = T⁻¹AT, invariantes, transformación activa vs. cambio de base |
-| Respuesta temporal | Respuesta libre con solución cerrada (incluye bloques de Jordan), escalón, impulso, sinusoide, Bode, e^{At} vs. serie truncada vs. exponencial por elementos |
-| Controlabilidad y observabilidad | 𝒞, 𝒪, valores singulares, prueba PBH por modo, realización mínima, grafo modal, subespacio alcanzable y elipse del gramiano, "misma salida con estados distintos", barrido de un cero sobre el eje real |
+| Poles and zeros | Editable s-plane (drag, add pairs, delete, snapping), matrices that flash when they change, G(s), table of modes, step response |
+| Representation | n-th order ODE → n first-order ODEs → vector form; the available realizations; matrix T between them; signal-flow graph |
+| Phase portrait | Vector field, family of trajectories, eigendirections, animation, comparison with modal coordinates, trace-determinant plane, modal decomposition in time |
+| Change of coordinates | Draggable basis {t₁, t₂}, A_z = T⁻¹AT, invariants, active transformation vs. change of basis |
+| Time response | Free response in closed form (including Jordan blocks), step, impulse, sinusoid, Bode, e^{At} vs. truncated series vs. element-wise exponential |
+| Controllability and observability | 𝒞, 𝒪, singular values, PBH test per mode, minimal realization, modal graph, reachable subspace and Gramian ellipse, "same output from different states", sweep of a zero along the real axis |
 
-Los rangos de controlabilidad y observabilidad se calculan con transformaciones ortogonales (forma escalonada) sobre el sistema balanceado, porque las matrices de Kalman se vuelven muy mal condicionadas en las formas canónicas de orden alto.
+Controllability and observability ranks are computed with orthogonal transformations (staircase form) on the balanced system, because Kalman matrices become badly conditioned in high-order canonical forms.
 
-## Estructura
+## Layout
 
 ```
-math/        álgebra lineal, polinomios, realizaciones, modos, 𝒞/𝒪, gramiano, simulación exacta
-components/  plano s, plano de fase, grafo, gráficos, circuito, plano traza-determinante
-tabs/        una pestaña por archivo
-i18n.ts      todos los textos; cada clave tiene [es, en, pt, fr, it, de]. $…$ se renderiza con KaTeX
-tests/           verificación numérica (bases modales, bloque real, 𝒞, 𝒪, cancelaciones, orden 8)
+math/        linear algebra, polynomials, realizations, modes, 𝒞/𝒪, Gramian, exact simulation
+circuits.ts  catalogue of example circuits (parameters, states, A, B, outputs, drawing)
+components/  s-plane, phase plane, graph, plots, circuit drawing, trace-determinant plane
+tabs/        one tab per file
+i18n.ts      all texts; each key has [es, en, pt, fr, it, de]. $…$ is rendered with KaTeX
+tests/       numerical checks (modal bases, real block, 𝒞, 𝒪, cancellations, order 8, circuits)
 ```
 
-Para agregar un idioma: añadir el código a `Lang` (src/format.ts), a `LANGS` y `L` (i18n.ts) y una columna más a cada entrada del diccionario; TypeScript señala las que falten.
+To add a circuit, add an entry to `CIRCUITS` in `circuits.ts` (ladder of series and shunt elements, A and B, outputs) and its name and note in `i18n.ts` (`circ.<id>`, `circ.note.<id>`).
 
-El idioma inicial es el del navegador (español si no está entre los seis disponibles) y se puede cambiar en la barra superior. Las preferencias (idioma, sistema, pestaña) se guardan en el navegador.
+To add a language: add its code to `Lang` (format.ts), to `LANGS` and `L` (i18n.ts) and one more column to every dictionary entry; TypeScript flags the missing ones.
+
+The initial language is the browser's (Spanish if it is not one of the six) and can be changed in the top bar. Preferences (language, system, tab) are stored in the browser.

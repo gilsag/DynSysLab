@@ -86,11 +86,13 @@ export function InfoTip({ text }: { text: string }) {
     const el = ref.current;
     if (!el) return;
     const r = el.getBoundingClientRect();
-    const x = Math.min(Math.max(8, r.left - 12), window.innerWidth - TIP_W - 12);
+    const w = Math.min(TIP_W, window.innerWidth - 16);
+    const x = Math.min(Math.max(8, r.left - 12), window.innerWidth - w - 8);
     const above = r.bottom + 190 > window.innerHeight;
     setPos({ x, y: above ? r.top - 8 : r.bottom + 8, above });
   };
   const hide = () => setPos(null);
+  const shownAt = useRef(0);
   return (
     <span
       ref={ref}
@@ -100,13 +102,20 @@ export function InfoTip({ text }: { text: string }) {
       aria-label={text}
       onMouseEnter={show}
       onMouseLeave={hide}
-      onFocus={show}
+      onFocus={() => { shownAt.current = Date.now(); show(); }}
       onBlur={hide}
+      onClick={(e) => {
+        // touch screens have no hover: a tap toggles the tip (the focus of the same tap already opened it)
+        e.stopPropagation();
+        if (Date.now() - shownAt.current < 400) return;
+        if (pos) hide();
+        else { shownAt.current = Date.now(); show(); }
+      }}
     >
       i
       {pos &&
         createPortal(
-          <div className={'tip-pop' + (pos.above ? ' above' : '')} style={{ left: pos.x, top: pos.y, maxWidth: TIP_W }} role="tooltip">
+          <div className={'tip-pop' + (pos.above ? ' above' : '')} style={{ left: pos.x, top: pos.y, maxWidth: Math.min(TIP_W, window.innerWidth - 16) }} role="tooltip">
             {text}
           </div>,
           document.body,

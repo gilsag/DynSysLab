@@ -1,5 +1,7 @@
 // Modelo de la aplicación: fuentes del sistema, realizaciones y análisis derivado
 import { C, cx } from './math/complex';
+import { circuitSystem, type CircuitState } from './circuits';
+export { defaultCircuit, type CircuitState } from './circuits';
 import { Mat, inv, matmul, eye } from './math/linalg';
 import { polyFromRoots, polyScale, polyRoots, cleanRoots, Poly, trimPoly } from './math/poly';
 import { SS, TF, ccf, ocf, modal, Modal, transform, tfPair, ctrb, VecNorm, dims } from './math/ss';
@@ -9,7 +11,6 @@ export type Realization = 'source' | 'ccf' | 'ocf' | 'modal';
 
 export interface Root { id: number; re: number; im: number } // im > 0 ⇒ par conjugado
 export interface PZState { poles: Root[]; zeros: Root[]; K: number }
-export interface CircuitState { R1: number; R2: number; C: number; L: number; output: 'vC' | 'iL' | 'both'; locus: 'none' | 'R1' | 'R2' | 'C' | 'L' }
 export interface MatrixState { A: string[][]; B: string[][]; C: string[][]; D: string[][] }
 
 let rootId = 1;
@@ -63,7 +64,6 @@ export const parseNum = (s: string): number => {
   return isFinite(v) ? v : NaN;
 };
 
-export const defaultCircuit: CircuitState = { R1: 10, R2: 8, C: 0.1, L: 1, output: 'vC', locus: 'R2' };
 
 // ---------- Construcción del sistema ----------
 export interface Built {
@@ -85,11 +85,8 @@ export interface Built {
   realizations: Partial<Record<Realization, SS>>;
 }
 
-export function circuitSS(c: CircuitState): SS {
-  const A = [[-1 / (c.R1 * c.C), -1 / c.C], [1 / c.L, -c.R2 / c.L]];
-  const B = [[1 / (c.R1 * c.C)], [0]];
-  const Cm = c.output === 'vC' ? [[1, 0]] : c.output === 'iL' ? [[0, 1]] : [[1, 0], [0, 1]];
-  return { A, B, C: Cm, D: Cm.map(() => [0]) };
+export function circuitSS(c: CircuitState, override?: Record<string, number>): SS {
+  return circuitSystem(c, override).ss;
 }
 
 export function zerosOf(tf: TF): C[] {
@@ -125,9 +122,10 @@ export function build(kind: SourceKind, pz: PZState, circ: CircuitState, mx: Mat
     base = ccf(tf);
     stateTex = P.map((_, i) => `x_{${i + 1}}`);
   } else if (kind === 'circuit') {
-    base = circuitSS(circ);
-    stateTex = ['v_C', 'i_L'];
-    outputTex = circ.output === 'vC' ? ['v_C'] : circ.output === 'iL' ? ['i_L'] : ['y_1', 'y_2'];
+    const cs = circuitSystem(circ);
+    base = cs.ss;
+    stateTex = [...cs.def.states];
+    outputTex = [...cs.out.names];
   } else {
     const A = mx.A.map((r) => r.map(parseNum)), B = mx.B.map((r) => r.map(parseNum)), Cm = mx.C.map((r) => r.map(parseNum)), D = mx.D.map((r) => r.map(parseNum));
     const bad = [A, B, Cm, D].some((M) => M.some((r) => r.some((v) => !isFinite(v))));

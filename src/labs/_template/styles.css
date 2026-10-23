@@ -4,7 +4,6 @@
    and rem for font sizes so the text-size setting applies. */
 
 .lab-app.myapp {
-  min-width: 1100px;
 }
 .myapp select {
   width: 100%;

@@ -4,7 +4,6 @@
 
 .lab-app.fourier {
   /* designed for desktop/laptop screens and classroom projectors */
-  min-width: 1100px;
 }
 .fourier select {
   width: 100%;

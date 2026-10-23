@@ -3,6 +3,7 @@ import { Lang, setFormatLang } from './format';
 import { initialLang } from '@shared/LabChrome';
 import { build, Built, CircuitState, defaultCircuit, MatrixState, matrixFromPreset, matrixPresets, newRoot, PZState, pzFromPreset, pzPresets, Realization, SourceKind } from './model';
 import { VecNorm } from './math/ss';
+import { restoreCircuit } from './circuits';
 import type { PZTool } from './components/SPlane';
 
 export type TabKey = 'splane' | 'repr' | 'phase' | 'coords' | 'resp' | 'co';
@@ -47,6 +48,7 @@ function initial(): UIState {
       let shared = false;
       try { shared = !!localStorage.getItem('utfsm-lab.lang'); } catch { /* */ }
       if (shared || !s.lang) merged.lang = base.lang;
+      merged.circuit = restoreCircuit(s.circuit);
       merged.pz = { ...merged.pz, poles: merged.pz.poles.map((r) => newRoot(r.re, r.im)), zeros: merged.pz.zeros.map((r) => newRoot(r.re, r.im)) };
       return merged;
     }

@@ -2,7 +2,7 @@
   "name": "dynsyslab-die-usm",
   "version": "1.0.0",
   "description": "DynSysLab DIE-USM: interactive virtual labs for linear dynamic systems (Fourier series, frequency response, state space). Departamento de Ingeniería Eléctrica, Universidad Técnica Federico Santa María.",
-  "author": "Esteban Gil <esteban.gil@usm.cl>",
+  "author": "Esteban Gil",
   "license": "CC-BY-NC-4.0",
   "private": true,
   "type": "module",

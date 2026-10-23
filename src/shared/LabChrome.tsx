@@ -160,6 +160,7 @@ export function cssVar(name: string, fallback = '#888'): string {
 /* ---------------------------------------------------------------- strings */
 type S6 = Record<LabLang, string>;
 const T = {
+  controls: { es: 'Controles', en: 'Controls', fr: 'Commandes', de: 'Steuerung', it: 'Controlli', pt: 'Controles' },
   language: { es: 'Idioma', en: 'Language', fr: 'Langue', de: 'Sprache', it: 'Lingua', pt: 'Idioma' },
   display: { es: 'Apariencia', en: 'Display', fr: 'Affichage', de: 'Darstellung', it: 'Aspetto', pt: 'Aparência' },
   theme: { es: 'Tema', en: 'Theme', fr: 'Thème', de: 'Modus', it: 'Tema', pt: 'Tema' },
@@ -222,15 +223,19 @@ export function DisplayMenu({ lang }: { lang: LabLang }) {
   }, [open]);
   const i = SCALES.indexOf(prefs.scale);
   const idx = i < 0 ? SCALES.indexOf(1) : i;
+  const [popTop, setPopTop] = useState(0);
   return (
-    <div className="lab-menu" ref={ref}>
+    <div className="lab-menu" ref={ref} style={{ ['--pop-top' as string]: `${popTop}px` }}>
       <button
         type="button"
         className={'lab-menu-btn toggle' + (open ? ' on' : '')}
         aria-expanded={open}
         aria-haspopup="dialog"
         title={t('display')}
-        onClick={() => setOpen(!open)}
+        onClick={(e) => {
+          setPopTop(e.currentTarget.getBoundingClientRect().bottom + 6);
+          setOpen(!open);
+        }}
       >
         <PaletteIcon />
         <span className="lab-menu-label">{t('display')}</span>
@@ -389,6 +394,36 @@ export function AboutButton({ lang, lab }: { lang: LabLang; lab?: LabId }) {
   );
 }
 
+const DIE_URL = 'https://eli.usm.cl/';
+
+/**
+ * On phones the sidebar becomes a sheet at the bottom of the screen, opened and closed with a floating button.
+ * Rendered only when the page has a .lab-sidebar; the CSS shows it only on narrow screens.
+ */
+function SidebarToggle({ lang }: { lang: LabLang }) {
+  const [has, setHas] = useState(false);
+  const [open, setOpen] = useState(false);
+  useEffect(() => setHas(!!document.querySelector('.lab-sidebar')), []);
+  useEffect(() => {
+    document.documentElement.classList.toggle('sheet-open', open);
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [open]);
+  if (!has) return null;
+  return (
+    <button type="button" className={'lab-fab' + (open ? ' on' : '')} aria-expanded={open} onClick={() => setOpen(!open)}>
+      {open ? (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      ) : (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" /><circle cx="16" cy="7" r="2" /><circle cx="10" cy="17" r="2" /></svg>
+      )}
+      <span>{T[open ? 'close' : 'controls'][lang]}</span>
+    </button>
+  );
+}
+
 /** Common header: institutional logo · app glyph · suite name and lab title, then app tools, About, Display and language. */
 export function LabHeader({
   logo,
@@ -418,7 +453,9 @@ export function LabHeader({
   return (
     <header className="lab-topbar">
       <div className="lab-brand">
-        <img className="lab-logo" src={logo} alt="Universidad Técnica Federico Santa María · Departamento de Ingeniería Eléctrica" />
+        <a className="lab-logo-link" href={DIE_URL} target="_blank" rel="noopener noreferrer" title="Departamento de Ingeniería Eléctrica · UTFSM">
+          <img className="lab-logo" src={logo} alt="Universidad Técnica Federico Santa María · Departamento de Ingeniería Eléctrica" />
+        </a>
         <span className="lab-brand-sep" aria-hidden="true" />
         <span className="lab-glyph" aria-hidden="true">
           {glyph}
@@ -437,6 +474,7 @@ export function LabHeader({
         <DisplayMenu lang={lang} />
         <LangSelect lang={lang} onChange={onLang} />
       </div>
+      <SidebarToggle lang={lang} />
     </header>
   );
 }
