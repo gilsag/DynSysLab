@@ -1,0 +1,185 @@
+/* Fourier Series Lab · app-specific styles.
+   Colours, typography, header, sidebar layout, cards, buttons, tabs and
+   tooltips come from shared/lab-theme.css (common to all the labs). */
+
+.lab-app.fourier {
+  /* designed for desktop/laptop screens and classroom projectors */
+  min-width: 1100px;
+}
+.fourier select {
+  width: 100%;
+}
+.fourier .lab-lang select {
+  width: auto;
+}
+.fourier input[type='number'],
+.fourier input.num {
+  width: 70px;
+}
+.fourier input.num.wide {
+  width: 96px;
+}
+.fourier input[type='range'] {
+  width: 100%;
+}
+
+.card.formula {
+  position: relative;
+  overflow-x: auto;
+  padding: 4px 14px;
+}
+.corner-tip {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+}
+h4 {
+  margin: 4px 0 6px;
+  font-size: 0.875rem;
+}
+
+.drawpad canvas {
+  cursor: crosshair;
+  touch-action: none;
+}
+
+button.play {
+  font-size: 1rem;
+  padding: 10px;
+  font-weight: 600;
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+button.play.on {
+  background: var(--c-error);
+  border-color: var(--c-error);
+  color: #fff;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.field.compact {
+  flex: 1;
+}
+
+.warnish {
+  color: var(--c-approx);
+}
+.readout.big {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.ab {
+  padding: 6px 10px;
+  border-radius: 7px;
+  font-size: 0.8125rem;
+}
+.ab.ref {
+  background: color-mix(in srgb, var(--c-signal) 18%, transparent);
+}
+.ab.approx {
+  background: color-mix(in srgb, var(--c-approx) 18%, transparent);
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tab-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.tab-body > div {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tab-tip {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.table-wrap {
+  max-height: 420px;
+}
+.htable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+.htable th {
+  position: sticky;
+  top: 0;
+  background: var(--panel-2);
+  text-align: left;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.htable td {
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+.htable tr.off td {
+  opacity: 0.45;
+}
+.bar-col {
+  min-width: 140px;
+}
+.bar {
+  position: relative;
+  height: 18px;
+  background: var(--panel-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.bar > div {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: color-mix(in srgb, var(--c-approx) 45%, transparent);
+}
+.bar > span {
+  position: relative;
+  padding-left: 6px;
+  line-height: 18px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.span2 {
+  grid-column: 1 / -1;
+}
+
+.lti-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 560px;
+}
+.formula-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 30px;
+  overflow-x: auto;
+}
+
+.theory p {
+  margin: 0 0 4px;
+  max-width: 80ch;
+}

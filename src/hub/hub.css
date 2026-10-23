@@ -1,0 +1,84 @@
+/* Home page of DynSysLab DIE-USM */
+.hub-main {
+  max-width: 1180px;
+  margin: 8px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.hub-intro h2 {
+  margin: 6px 0 6px;
+  font-size: 1.5rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.hub-intro p {
+  margin: 0;
+  max-width: 75ch;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+.hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 14px;
+}
+.hub-card {
+  gap: 10px;
+  padding: 16px 18px;
+}
+.hub-card-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+.hub-card-link:hover h3 {
+  color: var(--accent);
+}
+.hub-card h3 {
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+.hub-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  flex: 1;
+}
+.hub-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.hub-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.8125rem;
+}
+.hub-btn:hover {
+  border-color: var(--accent);
+}
+.hub-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+.hub-foot {
+  border-top: 1px solid var(--border);
+  padding-top: 10px;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+.hub-foot a {
+  color: var(--accent);
+}

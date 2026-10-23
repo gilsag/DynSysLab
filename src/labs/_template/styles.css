@@ -1,0 +1,32 @@
+/* App-specific styles only. Colours, typography, header, sidebar, cards, buttons,
+   tabs, segmented controls, metrics and tooltips come from shared/lab-theme.css.
+   Use the shared tokens (var(--accent), var(--s2), var(--c-pole), …), never raw hex,
+   and rem for font sizes so the text-size setting applies. */
+
+.lab-app.myapp {
+  min-width: 1100px;
+}
+.myapp select {
+  width: 100%;
+}
+.myapp .lab-lang select {
+  width: auto;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tab-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tab-tip {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}

@@ -1,0 +1,685 @@
+/* Bode Lab · app-specific styles.
+   Colours, typography, header, sidebar layout, cards, buttons, tabs and
+   segmented controls come from shared/lab-theme.css (common to all the labs). */
+
+.bode .mono {
+  font-weight: 500;
+}
+.gap {
+  gap: 8px;
+}
+.bode .row {
+  gap: 0;
+}
+.bode .row.gap {
+  gap: 8px;
+}
+.bode .grow {
+  min-width: 80px;
+}
+.bode select {
+  max-width: 100%;
+}
+
+/* ---------- layout: sidebar (s-plane, gain, roots, H(s)) + main (Bode · analysis)
+   ≥ 1500 px  main splits into Bode | analysis
+   < 1500 px  Bode on top, analysis below */
+.bode-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+.bode-main > .center,
+.bode-main > .side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+@media (min-width: 1500px) {
+  .bode-main {
+    grid-template-columns: minmax(0, 1fr) clamp(380px, 30vw, 540px);
+  }
+  .bode-main > .side {
+    position: sticky;
+    top: 10px;
+    max-height: calc(100vh - 20px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+.bodecard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.bode-wrap {
+  position: relative;
+  height: clamp(420px, calc(100vh - 250px), 820px);
+}
+.bode-wrap > svg {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------- controls specific to Bode Lab */
+.seg.full {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+.seg.full button {
+  flex: 1 1 auto;
+  padding-inline: 8px;
+}
+.seg button.pole:not(.on) {
+  color: var(--c-pole);
+}
+.seg button.zero:not(.on) {
+  color: var(--c-zero);
+}
+input.num {
+  width: 72px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  padding: 3px 6px;
+}
+.card-head + .hint,
+.hint {
+  margin: 0;
+}
+.note {
+  color: var(--muted);
+  margin: 0;
+}
+.note.warn {
+  color: var(--bad);
+}
+.tabbody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+}
+.tabbody > * {
+  margin-top: 0;
+}
+
+/* ---------- s-plane */
+.splane-wrap {
+  width: 100%;
+  position: relative;
+}
+.splane {
+  display: block;
+  touch-action: none;
+  user-select: none;
+  border-radius: 6px;
+  background: var(--rhp);
+  cursor: grab;
+}
+.splane.mode-pole,
+.splane.mode-zero {
+  cursor: crosshair;
+}
+.splane.mode-delete {
+  cursor: default;
+}
+.splane .lhp {
+  fill: var(--lhp);
+}
+.splane .grid,
+.bode .grid,
+.lineplot .grid {
+  stroke: var(--grid);
+  stroke-width: 1;
+}
+.bode .grid.minor {
+  stroke: var(--grid-minor);
+}
+.splane .axis {
+  stroke: var(--axis);
+  stroke-width: 1.2;
+}
+.tick {
+  fill: var(--muted);
+  font-size: 0.71875rem;
+  font-family: var(--mono);
+}
+.axlabel {
+  fill: var(--muted);
+  font-size: 0.8125rem;
+  font-style: italic;
+}
+.root {
+  cursor: grab;
+}
+.root.mode-delete {
+  cursor: pointer;
+}
+.root .hit {
+  fill: transparent;
+}
+.root .mark {
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+.root.pole .mark {
+  stroke: var(--c-pole);
+}
+.root.zero .mark {
+  stroke: var(--c-zero);
+  fill: var(--plot-bg);
+}
+.root .halo {
+  fill: var(--accent-soft);
+  stroke: var(--accent);
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+.root.mode-delete:hover .mark {
+  stroke: var(--bad);
+}
+.root .mult {
+  fill: var(--text);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-family: var(--mono);
+}
+.vec {
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0.75;
+}
+.vec.pole {
+  stroke: var(--c-pole);
+}
+.vec.zero {
+  stroke: var(--c-zero);
+}
+.wstar {
+  fill: var(--accent);
+  stroke: var(--panel);
+  stroke-width: 1.5;
+}
+.wstar-label {
+  fill: var(--accent);
+  font-size: 0.6875rem;
+  font-family: var(--mono);
+}
+.overlay-root {
+  fill: none;
+  stroke: var(--c-overlay);
+  stroke-width: 1.6;
+  stroke-dasharray: 3 2;
+}
+.locus {
+  fill: var(--c-locus);
+  opacity: 0.55;
+}
+.clpole {
+  stroke: var(--panel);
+  stroke-width: 1;
+}
+.clpole.good {
+  fill: var(--good);
+}
+.clpole.bad {
+  fill: var(--bad);
+}
+.clmark {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--good);
+  transform: rotate(45deg);
+}
+.splane-status {
+  font-family: var(--mono);
+  font-size: 0.71875rem;
+  color: var(--muted);
+  text-align: right;
+  height: 16px;
+  margin-top: 4px;
+}
+
+/* ---------- roots table */
+table.roots {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78125rem;
+}
+table.roots th {
+  text-align: left;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 2px 4px 6px;
+}
+table.roots td {
+  padding: 3px 4px;
+  border-top: 1px solid var(--grid);
+  white-space: nowrap;
+}
+table.roots tr.sel td {
+  background: var(--accent-soft);
+}
+table.roots input.num {
+  width: 100%;
+  min-width: 48px;
+}
+table.roots td:nth-child(n + 2):nth-child(-n + 5) {
+  width: 21%;
+}
+.kindbtn {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+  margin-right: 6px;
+}
+.kindbtn.pole {
+  color: var(--c-pole);
+}
+.kindbtn.zero {
+  color: var(--c-zero);
+}
+.kindtxt {
+  display: inline-flex;
+  flex-direction: column;
+  line-height: 1.1;
+  vertical-align: middle;
+}
+.kindtxt small {
+  color: var(--muted);
+  font-size: 0.65625rem;
+}
+.iconbtn {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+.iconbtn:hover {
+  color: var(--bad);
+  background: var(--grid);
+}
+
+/* ---------- transfer function */
+.tf {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-x: auto;
+}
+.tfrow {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.tflabel {
+  font-size: 0.6875rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.tfexpr {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.tfexpr .frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tfexpr .num {
+  border-bottom: 1.5px solid var(--text);
+  padding: 0 4px 2px;
+}
+.tfexpr .den {
+  padding: 2px 4px 0;
+}
+.tfexpr .k {
+  color: var(--accent);
+}
+.tfexpr .delay {
+  color: var(--c-overlay);
+}
+
+/* ---------- Bode */
+.bodebar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  font-size: 0.78125rem;
+  padding: 6px 10px;
+  background: var(--bg);
+  border-radius: 6px;
+  min-height: 30px;
+  align-items: center;
+}
+.readout .margins-txt {
+  margin-left: auto;
+}
+.pin {
+  font-style: normal;
+  font-size: 0.6875rem;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 0 4px;
+  margin-left: 6px;
+}
+.lineplot-wrap {
+  width: 100%;
+}
+.bode {
+  display: block;
+  cursor: crosshair;
+  user-select: none;
+}
+.frame {
+  fill: none;
+  stroke: var(--border);
+}
+.grid.zero {
+  stroke: var(--axis) !important;
+  stroke-dasharray: 4 3;
+}
+.curve {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+.curve.main {
+  stroke: var(--accent);
+  stroke-width: 2.4;
+}
+.curve.asym {
+  stroke: var(--accent);
+  stroke-width: 1.4;
+  stroke-dasharray: 6 4;
+  opacity: 0.7;
+}
+.curve.overlay {
+  stroke: var(--c-overlay);
+  stroke-width: 2.4;
+  stroke-dasharray: 8 5;
+}
+.curve.factor {
+  stroke-width: 1.3;
+  opacity: 0.85;
+}
+.curve.input {
+  stroke: var(--axis);
+  stroke-width: 1.2;
+}
+.curve.steady {
+  stroke: var(--c-overlay);
+  stroke-width: 1.6;
+  stroke-dasharray: 5 4;
+}
+.curve.mirror {
+  stroke: var(--accent);
+  stroke-width: 1.3;
+  stroke-dasharray: 4 3;
+  opacity: 0.6;
+}
+.curve.f1, .swatch.f1 { stroke: var(--c-input); background: var(--c-input); }
+.curve.f2, .swatch.f2 { stroke: var(--s2); background: var(--s2); }
+.curve.f3, .swatch.f3 { stroke: var(--s6); background: var(--s6); }
+.curve.f4, .swatch.f4 { stroke: var(--s4); background: var(--s4); }
+.curve.f5, .swatch.f5 { stroke: var(--s5); background: var(--s5); }
+.curve.f6, .swatch.f6 { stroke: var(--s3); background: var(--s3); }
+.curve.f7, .swatch.f7 { stroke: var(--s7); background: var(--s7); }
+.curve.f8, .swatch.f8 { stroke: var(--s8); background: var(--s8); }
+.swatch {
+  display: inline-block;
+  width: 12px;
+  height: 3px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.factorlegend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  color: var(--muted);
+}
+.margin line,
+.margin circle {
+  stroke-width: 2;
+}
+.margin.ok line {
+  stroke: var(--good);
+}
+.margin.ok circle {
+  fill: var(--good);
+}
+.margin.bad line {
+  stroke: var(--bad);
+}
+.margin.bad circle {
+  fill: var(--bad);
+}
+.margin text {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-family: var(--mono);
+}
+.margin.ok text {
+  fill: var(--good);
+}
+.margin.bad text {
+  fill: var(--bad);
+}
+.refline,
+.margin .refline,
+.margin.refline {
+  stroke: var(--axis) !important;
+  stroke-width: 1 !important;
+  stroke-dasharray: 4 3;
+}
+.cursor line {
+  stroke: var(--text);
+  stroke-width: 1;
+  opacity: 0.35;
+}
+.cursor.pinned line {
+  opacity: 0.8;
+  stroke: var(--accent);
+}
+.cursor circle {
+  fill: var(--accent);
+  stroke: var(--panel);
+  stroke-width: 1.5;
+}
+.lg {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.lg::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 0;
+  border-top: 2.4px solid var(--accent);
+}
+.lg.asym::before {
+  border-top: 1.5px dashed var(--accent);
+}
+.check .lg.asym {
+  gap: 0;
+}
+.lg.overlay::before {
+  border-top: 2.4px dashed var(--c-overlay);
+}
+.lg.input::before {
+  border-top-color: var(--axis);
+  border-top-width: 1.5px;
+}
+.lg.steady::before {
+  border-top: 2px dashed var(--c-overlay);
+}
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 2px 0;
+  color: var(--muted);
+}
+
+/* ---------- tabs and metrics */
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
+  margin-top: 10px;
+}
+.metrics > div {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 7px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.metrics span {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.metrics b {
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.unitcircle {
+  fill: none;
+  stroke: var(--axis);
+  stroke-dasharray: 3 4;
+  opacity: 0.7;
+}
+.minusone {
+  stroke: var(--bad);
+  stroke-width: 2.4;
+}
+.arrow {
+  fill: var(--accent);
+}
+table.contrib {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78125rem;
+}
+table.contrib th {
+  text-align: left;
+  color: var(--muted);
+  font-weight: 500;
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--border);
+}
+table.contrib td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--grid);
+}
+table.contrib .r {
+  text-align: right;
+}
+table.contrib tr.total td {
+  font-weight: 600;
+  border-bottom: 0;
+  border-top: 1.5px solid var(--border);
+}
+.score {
+  margin-top: 12px;
+}
+.bar {
+  height: 10px;
+  border-radius: 5px;
+  background: var(--grid);
+  overflow: hidden;
+}
+.bar .fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.25s;
+}
+.bar .fill.solved {
+  background: var(--good);
+}
+.solved-msg {
+  color: var(--good);
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 10px 0 0;
+}
+
+/* ---------- insights */
+ul.insights {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+ul.insights li {
+  padding: 6px 10px 6px 12px;
+  border-left: 3px solid var(--axis);
+  background: var(--bg);
+  border-radius: 0 6px 6px 0;
+  font-size: 0.8125rem;
+}
+ul.insights li.warn {
+  border-left-color: var(--c-overlay);
+}
+ul.insights li.bad {
+  border-left-color: var(--bad);
+}
+ul.insights li.good {
+  border-left-color: var(--good);
+}
+
+/* legibility halo for labels drawn over plots */
+.splane .tick,
+.splane .axlabel,
+.wstar-label,
+.margin text {
+  paint-order: stroke;
+  stroke: var(--bg);
+  stroke-width: 3px;
+  stroke-linejoin: round;
+}
+.margin text {
+  stroke: var(--panel);
+}
+.roots-wrap {
+  overflow-x: auto;
+}
+@media (max-width: 480px) {
+  table.roots input.num {
+    width: 54px;
+  }
+  .card {
+    padding: 12px;
+  }
+}

@@ -1,0 +1,57 @@
+/* Convolution lab · app-specific styles (shared look in shared/lab-theme.css). */
+.lab-app.convlab {
+  min-width: 1100px;
+}
+.convlab select {
+  width: 100%;
+}
+.convlab .lab-lang select {
+  width: auto;
+}
+.param-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+}
+.param-grid .field-row {
+  gap: 6px;
+  justify-content: flex-start;
+}
+.sig-tex {
+  overflow-x: auto;
+  font-size: 0.85rem;
+  padding: 2px 0;
+}
+.time-bar {
+  padding: 10px 14px;
+}
+.time-bar .row {
+  gap: 14px;
+}
+.ode-grid {
+  grid-template-columns: 1fr;
+}
+.coeff-input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--text);
+}
+.coeff-input.bad {
+  border-color: var(--bad);
+}
+.ode-help {
+  margin: 4px 0 2px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.sig-tex {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
