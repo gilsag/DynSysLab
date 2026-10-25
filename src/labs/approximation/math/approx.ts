@@ -49,7 +49,8 @@ export function makeBasis(family: Family, n: number, t1: number, t2: number): Ba
     const fns: Fn[] = [() => 1];
     const names = ['1'];
     for (let k = 1; k <= K; k++) {
-      fns.push((t) => Math.cos(k * w * (t - t1)), (t) => Math.sin(k * w * (t - t1)));
+      // same functions the labels show: cos(kω₀t), sin(kω₀t); orthogonal over any interval one period long
+      fns.push((t) => Math.cos(k * w * t), (t) => Math.sin(k * w * t));
       const kk = k === 1 ? '' : String(k);
       names.push(`\\cos(${kk}\\omega_0 t)`, `\\operatorname{sen}(${kk}\\omega_0 t)`);
     }

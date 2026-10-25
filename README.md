@@ -8,14 +8,20 @@ Interactive virtual labs for dynamic systems, developed at the Department of Ele
 
 | Lab | Page | What it covers |
 |---|---|---|
+| Signals and System Properties | `properties.html` | Basic signals (including ramps times exponentials and sinusoids, the modes of repeated roots), shifting, scaling and reversal, even and odd parts, energy and power, sampling and discrete periodicity; linearity, time invariance, causality, memory and BIBO stability tested by experiment on a catalogue of systems or your own formula |
 | Taylor Series and Linearization | `taylor.html` | Partial sums and radius of convergence, tangent line, residual bound and range of validity, equilibria, Jacobian, classification and phase portrait of nonlinear second-order systems |
-| Convolution | `convolution.html` | Graphical recipe (flip, shift, integrate) with segment changes, first and second Duhamel integrals, cascade and parallel connections |
+| Equivalent Representations | `representations.html` | One system as a differential equation, transfer function, state space and block diagram; controllable and observable canonical forms, non-minimal realizations, step and impulse responses |
+| Block-Diagram Reduction | `block-diagrams.html` | Series, parallel and feedback rules, moving pickoff points and summing points when loops overlap, step by step on six examples; result with editable block values, poles and step response |
+| Linear Differential Equations | `ode.html` | Natural and forced modes, complex gain and resonance, homogeneous and particular, zero-input and zero-state, transient and steady-state response |
 | Function Approximation | `approximation.html` | Basic signals, squared error, normal equations and Gram matrix, orthogonality; pulses, steps, trigonometric basis, monomials and Legendre polynomials |
+| Convolution | `convolution.html` | Graphical recipe (flip, shift, integrate) with segment changes, first and second Duhamel integrals, cascade and parallel connections |
 | State Space | `state-space.html` | System defined from matrices, poles and zeros, or an example circuit; realizations, modes, phase portraits, change of coordinates, time response, controllability and observability |
 | Fourier Series | `fourier.html` | Harmonic decomposition, N-term approximation, Gibbs phenomenon, spectrum, phasors, LTI filtering, sound |
+| Circuits in the Laplace Domain | `laplace.html` | Generalized impedance and initial-condition sources (series or parallel), nodal and mesh equations in s (symbolic and numeric), zero-state and zero-input response, partial fractions with repeated poles, initial- and final-value theorems |
+| Canonical Second-Order System | `second-order.html` | Poles as functions of ζ and ωn (draggable), step and impulse response, overshoot, rise, peak and settling times measured against the formulas, resonance peak and bandwidth, series RLC mapping |
 | Frequency Response | `frequency.html` | s-plane poles and zeros, Bode plots with asymptotes and margins, Nyquist, time response, identification challenges |
 
-Students can type their own functions in the Taylor, approximation and convolution labs; derivatives, Taylor coefficients and Jacobians are computed exactly from the formula. In the convolution lab only the input u(t) accepts free formulas: impulse responses are limited to those of linear systems (first and second order, integrator, a general ODE Q(D) y = P(D) u, and gain with pure delay).
+Students can type their own functions in the Taylor, approximation and convolution labs; derivatives, Taylor coefficients and Jacobians are computed exactly from the formula. In the convolution lab only the input u(t) accepts free formulas: impulse responses are limited to those of linear systems (first and second order, integrator, a general ODE Q(D) y = P(D) u, and gain with pure delay). In the properties lab you can also type a signal x(t), a test input u(t) or a memoryless system y = f(u, t), whose properties are then decided by numerical tests.
 
 The home page (`index.html`) lists all labs. Every lab runs in the browser, in Spanish, English, French, German, Italian and Portuguese (browser language by default), with light and dark themes, four palettes (Blue, USM, Paper, High contrast) and adjustable text size for projection. They also work on tablets and phones; on a phone the controls open from a button at the bottom of the screen.
 

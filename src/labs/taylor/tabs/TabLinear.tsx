@@ -15,7 +15,7 @@ export interface TolState {
 export function TabLinear({ s, tol, lang }: { s: ScalarState; tol: TolState; lang: Lang }) {
   const t = useT();
   const { formula, a, view } = s;
-  const c = useMemo(() => taylor(formula.node, a, 2), [formula, a]);
+  const c = useMemo(() => taylor(formula.node, a, 8), [formula, a]);
   const res = useMemo(() => residual(formula.node, formula.f, a, view[0], view[1], 1200), [formula, a, view]);
   const range = validRange(res, a, tol.value, tol.relative);
   const xs = useMemo(() => grid(view), [view]);
@@ -24,6 +24,22 @@ export function TabLinear({ s, tol, lang }: { s: ScalarState; tol: TolState; lan
   const fpp = 2 * c[2];
   const scale = Math.max(1e-12, ...fy.filter(Number.isFinite).map(Math.abs));
   const inflection = Math.abs(fpp) < 1e-9 * scale;
+  // when f″(a) = 0, the first nonzero term after the linear one decides: odd order → inflection, even order → no inflection
+  const flat = useMemo(() => {
+    if (!inflection) return null;
+    const big = Math.max(1, ...Array.from(c).filter(Number.isFinite).map(Math.abs));
+    for (let k = 3; k < c.length; k++) if (Number.isFinite(c[k]) && Math.abs(c[k]) > 1e-10 * big) return { k, sign: Math.sign(c[k]) };
+    return { k: 0, sign: 0 };
+  }, [inflection, c]);
+  const flatText = (() => {
+    if (!flat) return '';
+    if (flat.k === 0) return t('flatNone');
+    const sup = String(flat.k).split('').map((d) => '⁰¹²³⁴⁵⁶⁷⁸⁹'[+d]).join('');
+    const fill = (str: string) => str.replace(/\^\{k\}/g, sup).replace(/\{k\}/g, String(flat.k));
+    if (flat.k % 2 === 1) return fill(t('flatOdd'));
+    const stationary = Math.abs(c[1]) < 1e-10 * Math.max(1, Math.abs(c[0]));
+    return fill(t('flatEven')) + ' ' + t(flat.sign > 0 ? (stationary ? 'flatMin' : 'flatAbove') : (stationary ? 'flatMax' : 'flatBelow'));
+  })();
 
   const spec: PlotSpec = useMemo(
     () => ({
@@ -86,7 +102,7 @@ export function TabLinear({ s, tol, lang }: { s: ScalarState; tol: TolState; lan
       <p className="callout">
         <Rich text={t('ideaLinear')} />
       </p>
-      {inflection && <p className="callout">{t('inflection')}</p>}
+      {flat && <p className="callout">{flatText}</p>}
       <div className="metrics">
         <Metric label="f(a)" value={fmt(c[0], lang, 6)} />
         <Metric label={t('mSlope')} value={fmt(c[1], lang, 6)} />

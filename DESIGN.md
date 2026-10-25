@@ -1,6 +1,6 @@
 # Design guide · DynSysLab DIE-USM
 
-DynSysLab DIE-USM is the suite of interactive virtual labs for the Dynamic Systems courses (Departamento de Ingeniería Eléctrica, UTFSM). It currently holds six labs, in this order: series de Taylor y linealización, convolución, aproximación de funciones, variables de estado, series de Fourier and respuesta en frecuencia. This guide applies to all of them and to any new one. The reference app is the Fourier lab.
+DynSysLab DIE-USM is the suite of interactive virtual labs for the Dynamic Systems courses (Departamento de Ingeniería Eléctrica, UTFSM). It currently holds twelve labs, in this order (the order of the course: each lab uses ideas from the ones before it): señales y propiedades de sistemas, series de Taylor y linealización, representaciones equivalentes, reducción de diagramas de bloques, ecuaciones diferenciales lineales, aproximación de funciones, convolución, variables de estado, series de Fourier, circuitos en el dominio de Laplace, sistema canónico de segundo orden and respuesta en frecuencia. This guide applies to all of them and to any new one. The reference app is the Fourier lab.
 
 ## 1. Repository, stack and builds
 
@@ -17,7 +17,7 @@ Everything in `src/shared/` is common to all labs and imported as `@shared/…`;
 - `suite.ts`: the lab registry (`SUITE_LABS`: title and home-page summary of each lab in six languages), `SUITE_NAME`, `AUTHOR`, `LICENSE`, `labHref`.
 - `LabChrome.tsx`: `LabHeader` (logo, lab glyph, suite name linking to the home page, lab title, subtitle, app tools, About, Display menu, language selector), `GLYPHS`, `initialLang` and `persistLang`, `useThemeVersion`, `textScale` and `cssVar` (for canvas drawing).
 - `lab-theme.css`: tokens, palettes, light/dark, layout and shared components.
-- `ui.tsx`: `Card`, `Slider`, `Seg`, `Check`, `InfoTip`, `Tex`, `Rich`. `Plot.tsx`: canvas plot (linear/log axes, lines, stems, legend, reference lines) that follows theme, palette, text size and window height.
+- `ui.tsx`: `Card`, `Slider`, `Seg`, `Check`, `InfoTip`, `Tex`, `Rich`. `Plot.tsx`: canvas plot (linear/log axes, lines, stems, legend, reference lines) that follows theme, palette, text size and window height. `BlockDiagram.tsx`: block diagrams drawn as SVG (canonical forms and chains with feedback and feedforward loops), styled by the `.bd-*` rules in `lab-theme.css`.
 - `expr.ts`: formula engine for functions typed by students (parser with error codes, compiled evaluation, exact Taylor coefficients by truncated power-series arithmetic, exact gradients by dual numbers). `ExprInput.tsx`: the formula field with translated error messages and syntax help. Never use finite differences when the formula is available.
 - `format.ts`: numbers as text (`fmt`) and TeX (`tex`) with decimal comma except in English. `NumField` in `ui.tsx` accepts comma or point.
 - `logo-utfsm-die.jpg`.

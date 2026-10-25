@@ -44,3 +44,10 @@ export function tex(x: number, lang: LabLang, sig = 4): string {
 export function tick(x: number, lang: LabLang): string {
   return fmt(x, lang, 4);
 }
+
+/** Writes the sine as the course does in each language: "sen" in Spanish, Portuguese and Italian, "sin" elsewhere. */
+export function localSin(tex: string, lang: LabLang): string {
+  return lang === 'es' || lang === 'pt' || lang === 'it'
+    ? tex.replace(/\\sin(?![a-zA-Z])/g, '\\operatorname{sen}')
+    : tex.replace(/\\operatorname\{sen\}/g, '\\sin');
+}

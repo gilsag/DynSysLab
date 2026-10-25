@@ -315,9 +315,10 @@ export function counts(sys: SystemDef) {
     np: expand(sys.roots, 'pole').length,
     z0: sys.roots.filter((r) => r.kind === 'zero' && isOrigin(r)).length,
     p0: sys.roots.filter((r) => r.kind === 'pole' && isOrigin(r)).length,
-    rhpZ: sys.roots.filter((r) => r.kind === 'zero' && r.re > 0).length,
-    rhpP: sys.roots.filter((r) => r.kind === 'pole' && r.re > 0).length,
-    imP: sys.roots.filter((r) => r.kind === 'pole' && r.re === 0 && r.im > 0).length,
+    // counted one by one: a complex root stands for a conjugate pair, i.e. two roots
+    rhpZ: expand(sys.roots, 'zero').filter((r) => r.re > 0).length,
+    rhpP: expand(sys.roots, 'pole').filter((r) => r.re > 0).length,
+    imP: expand(sys.roots, 'pole').filter((r) => r.re === 0 && r.im !== 0).length,
   };
 }
 

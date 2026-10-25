@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import logoUrl from '@shared/logo-utfsm-die.jpg';
 import { GLYPHS, initialLang, LabHeader, persistLang } from '@shared/LabChrome';
 import { ExprInput } from '@shared/ExprInput';
-import { fmt, tex as texNum } from '@shared/format';
+import { fmt, localSin, tex as texNum } from '@shared/format';
 import { Plot, type PlotSpec, type Series } from '@shared/Plot';
 import { Card, Check, InfoTip, NumField, Rich, Slider, Tex } from '@shared/ui';
 import type { LabLang } from '@shared/suite';
@@ -106,7 +106,7 @@ function SignalEditor({ def, onChange, lang, window, name }: { def: SigDef; onCh
             ))}
           </div>
           <div className="sig-tex">
-            <Tex tex={`${name}(t) = ${sig.tex('t')}`} />
+            <Tex tex={localSin(`${name}(t) = ${sig.tex('t')}`, lang)} />
           </div>
         </>
       )}
@@ -222,20 +222,25 @@ export default function App() {
     const g = stepResponse(h, ts.map((x) => x - win[0]));
     const gAt = (x: number) => stepResponse(h, [x])[0];
     const sd = stepDecomposition(u, ua, ub, nParts);
-    const stair = ts.map((x) => { let s = 0; sd.taus.forEach((tk, k) => { if (x >= tk) s += sd.inc[k]; }); return s; });
+    // an input impulse w·δ(t − t₀) is not a sum of finite steps: in the staircase it becomes a pulse of width Δ and area w
+    const dImp = sd.dt > 0 ? sd.dt : (win[1] - win[0]) / nParts;
+    const stair = ts.map((x) => { let s = 0; sd.taus.forEach((tk, k) => { if (x >= tk) s += sd.inc[k]; }); return s + u.imp.reduce((q, i) => q + (x >= i.t && x < i.t + dImp ? i.w / dImp : 0), 0); });
     // tabulate g on a fine grid for speed
     const G0 = win[0] - (win[1] - win[0]), G1 = win[1] - win[0] + Math.max(0, -win[0]);
     const M = 2000;
     const gs = Array.from({ length: M + 1 }, (_, i) => G0 + ((G1 - G0) * i) / M);
     const gv = stepResponse(h, gs);
     const gLook = (x: number) => { if (x <= G0) return 0; if (x >= G1) return gAt(x); const p = ((x - G0) / (G1 - G0)) * M; const i = Math.floor(p); return gv[i] + (gv[Math.min(M, i + 1)] - gv[i]) * (p - i); };
-    const ySteps = ts.map((x) => sd.taus.reduce((s, tk, k) => s + sd.inc[k] * gLook(x - tk), 0));
+    const ySteps = ts.map((x) => sd.taus.reduce((s, tk, k) => s + sd.inc[k] * gLook(x - tk), 0)
+      + u.imp.reduce((q, i) => q + (i.w * (gLook(x - i.t) - gLook(x - i.t - dImp))) / dImp, 0));
     const id = impulseDecomposition(u, ua, ub, nParts);
     // impulses of h (D·δ or a delay) turn each input impulse into an impulse; drawn as a box of width Δτ and the same area
+    // input impulses enter the impulse decomposition exactly, with their own weight
     const yImps = ts.map((x) => id.taus.reduce((s, tk, k) => s + id.areas[k] * h.f(x - tk), 0)
+      + u.imp.reduce((q, i) => q + i.w * h.f(x - i.t), 0)
       + h.imp.reduce((s, i) => s + id.taus.reduce((q, tk, k) => q + (Math.abs(x - tk - i.t) < id.dt / 2 ? (id.areas[k] * i.w) / id.dt : 0), 0), 0));
     const hOnTs = ts.map((x) => h.f(x - win[0]));
-    return { g, sd, stair, ySteps, id, yImps, hOnTs };
+    return { g, sd, stair, ySteps, id, yImps, hOnTs, dImp };
   }, [tab, h, u, ts, win, ua, ub, nParts]);
 
   // ---------------------------------------------------------------- systems tab
@@ -348,7 +353,7 @@ export default function App() {
                 <Rich text={t('ideaDuhamel')} />
               </p>
               <div className="card time-bar">
-                <Slider label={t('nParts')} value={nParts} min={1} max={60} step={1} onChange={(v) => setNParts(Math.round(v))} display={`n = ${nParts},  Δτ = ${fmt((ub - ua) / nParts, lang, 3)}`} />
+                <Slider label={t('nParts')} value={nParts} min={1} max={60} step={1} onChange={(v) => setNParts(Math.round(v))} display={`n = ${nParts},  Δτ = ${fmt(ub > ua ? (ub - ua) / nParts : duh.dImp, lang, 3)}`} />
               </div>
               <div className="two-col stack-narrow">
                 <Card title={t('stepsCard')} info={t('tipStepsCard')}>
@@ -357,9 +362,10 @@ export default function App() {
                     spec={{
                       series: [
                         { x: ts, y: ts.map((x) => u.f(x)), color: '--c-signal', width: 2, label: 'u(t)' },
+                        ...(u.imp.length ? [{ x: u.imp.map((i) => i.t), y: u.imp.map((i) => i.w), color: '--c-signal', kind: 'arrow', width: 2 } as Series] : []),
                         { x: ts, y: duh.stair, color: '--c-approx', width: 1.8, label: t('approxIn') },
                       ],
-                      xRange: win, yRange: range(ts.map((x) => u.f(x)), duh.stair), xLabel: 't', legend: true,
+                      xRange: win, yRange: range(ts.map((x) => u.f(x)), [...duh.stair, ...u.imp.map((i) => i.w)]), xLabel: 't', legend: true,
                     }}
                   />
                   <Plot
@@ -375,6 +381,7 @@ export default function App() {
                   <p className="hint">
                     {t('maxErr')}: {fmt(Math.max(...duh.ySteps.map((v, i) => Math.abs(v - y[i]))), lang, 3)}
                   </p>
+                  {u.imp.length > 0 && <p className="hint">{t('impInSteps')}</p>}
                 </Card>
                 <Card title={t('impCard')} info={t('tipImpCard')}>
                   <Plot
@@ -383,8 +390,9 @@ export default function App() {
                       series: [
                         { x: ts, y: ts.map((x) => u.f(x)), color: '--c-signal', width: 2, label: 'u(t)' },
                         { x: duh.id.taus, y: duh.id.taus.map((x) => u.f(x)), color: '--c-approx', kind: 'arrow', width: 1.6, label: 'u(τₖ)Δτ · δ(t − τₖ) / Δτ' },
+                        ...(u.imp.length ? [{ x: u.imp.map((i) => i.t), y: u.imp.map((i) => i.w), color: '--c-signal', kind: 'arrow', width: 2 } as Series] : []),
                       ],
-                      xRange: win, yRange: range(ts.map((x) => u.f(x))), xLabel: 't', legend: true,
+                      xRange: win, yRange: range(ts.map((x) => u.f(x)), u.imp.map((i) => i.w)), xLabel: 't', legend: true,
                     }}
                   />
                   <Plot
@@ -400,6 +408,7 @@ export default function App() {
                   <p className="hint">
                     {t('maxErr')}: {fmt(Math.max(...duh.yImps.map((v, i) => Math.abs(v - y[i]))), lang, 3)}
                   </p>
+                  {u.imp.length > 0 && <p className="hint">{t('impInImps')}</p>}
                 </Card>
               </div>
               <Card title={t('gTitle')} info={t('tipG')}>

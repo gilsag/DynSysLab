@@ -505,6 +505,45 @@ export const GLYPHS: Record<LabId, ReactNode> = {
       <path d="M3 12 C5 4.5 7 4.5 9 12 S13 19.5 15 12 S19 4.5 21 12" />
     </svg>
   ),
+  representations: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="8" width="7" height="8" rx="1" />
+      <circle cx="16" cy="12" r="2.6" />
+      <path d="M10 12h3.4 M18.6 12H22 M16 14.6V19H6.5v-3" />
+    </svg>
+  ),
+  properties: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 19h4V10h6v9h3" />
+      <path d="M14.5 6.5l2.3 2.3 4.7-4.7" opacity="0.7" />
+    </svg>
+  ),
+  'block-diagrams': (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="5" cy="8" r="2.4" />
+      <rect x="10" y="5" width="7" height="6" rx="1" />
+      <path d="M7.4 8H10 M17 8h5 M19.5 8v9H5v-6.6" opacity="0.7" />
+    </svg>
+  ),
+  ode: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 20 C6 20 7 6 11 6 C14 6 15 14 21 14" />
+      <path d="M3 14 H21" opacity="0.45" />
+      <path d="M3 20 C7 18 10 15 21 14" opacity="0.65" />
+    </svg>
+  ),
+  laplace: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M2 7h3l1.5-3 3 6 3-6 3 6 1.5-3H22" />
+      <path d="M4 20 C7 20 8 13 11 13 S15 18 21 18" opacity="0.65" />
+    </svg>
+  ),
+  'second-order': (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 20 H5 C7 20 8 4 11 5 C13 6 14 13 16 12 C17.5 11.3 18.5 10.5 21 10.5" />
+      <path d="M5 10.5 H21" opacity="0.5" />
+    </svg>
+  ),
   frequency: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
       <path d="M3 7 H10 L21 18" />

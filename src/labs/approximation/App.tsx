@@ -290,7 +290,7 @@ export default function App() {
                     <tr key={k}>
                       <td>{k + 1}</td>
                       <td>
-                        <Tex tex={basis.names[k]} />
+                        <Tex tex={lang === 'es' || lang === 'pt' || lang === 'it' ? basis.names[k] : basis.names[k].replace('\\operatorname{sen}', '\\sin')} />
                       </td>
                       <td className="mono">{fmt(snap(res.rhs[k], rhsMax), lang, 5)}</td>
                       <td className="mono">{fmt(res.gram[k][k], lang, 5)}</td>

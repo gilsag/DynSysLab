@@ -80,7 +80,7 @@ export function build(def: SigDef, window: [number, number]): Signal {
         tex: (v) => `${num(p.A)}\\,\\frac{${shift(v, d)}}{${num(p.T)}}\\left[\\mu(${shift(v, d)}) - \\mu(${shift(v, d + p.T)})\\right]` };
     case 'tri':
       return { f: (t) => (t >= d && t <= d + p.T ? p.A * (1 - Math.abs((2 * (t - d)) / p.T - 1)) : 0), imp: [], sup: [d, d + p.T], breaks: [d, d + p.T / 2, d + p.T], scale: p.T,
-        tex: () => `\\text{triángulo},\\ A = ${num(p.A)},\\ T_p = ${num(p.T)}` };
+        tex: (v) => `${num(p.A)}\\left(1 - \\left|\\tfrac{2${par(v, d)}}{${num(p.T)}} - 1\\right|\\right)\\left[\\mu(${shift(v, d)}) - \\mu(${shift(v, d + p.T)})\\right]` };
     case 'halfsine':
       return { f: (t) => (t >= d && t <= d + p.T ? p.A * Math.sin((Math.PI * (t - d)) / p.T) : 0), imp: [], sup: [d, d + p.T], breaks: [d, d + p.T], scale: p.T,
         tex: (v) => `${num(p.A)}\\operatorname{sen}\\!\\left(\\tfrac{\\pi ${par(v, d)}}{${num(p.T)}}\\right)\\left[\\mu(${shift(v, d)}) - \\mu(${shift(v, d + p.T)})\\right]` };
@@ -135,7 +135,7 @@ export function build(def: SigDef, window: [number, number]): Signal {
         if (Math.abs(f(t)) > 1e-12) { a = Math.min(a, t); b = Math.max(b, t); }
       }
       if (a > b) { a = 0; b = 0; }
-      return { f: (t) => { const v = f(t); return Number.isFinite(v) ? v : 0; }, imp: [], sup: [a, b], breaks: [], scale: (window[1] - window[0]) / 4, tex: (v) => (def.src ?? '').replace(/t/g, v) };
+      return { f: (t) => { const v = f(t); return Number.isFinite(v) ? v : 0; }, imp: [], sup: [a, b], breaks: [], scale: (window[1] - window[0]) / 4, tex: (v) => (def.src ?? '').replace(/(?<![A-Za-z])t(?![A-Za-z])/g, v.length > 1 ? `(${v})` : v) };
     }
   }
 }

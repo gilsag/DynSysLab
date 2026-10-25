@@ -45,3 +45,14 @@ describe('apunte 07', () => {
     expect(m.cond).toBeGreaterThan(30 * l.cond); // 358 vs 9 for n = 5
   });
 });
+
+describe('trigonometric basis on an interval that does not start at 0', () => {
+  it('the functions are the ones the labels show: sin(πt) on [−1, 1] has coefficient 1 on sin(ω₀t)', () => {
+    const b = makeBasis('trig', 3, -1, 1);
+    expect(b.names[2]).toContain('omega_0 t');
+    expect(b.fns[2](0.5)).toBeCloseTo(Math.sin(Math.PI * 0.5), 12);
+    const r = fit((t: number) => Math.sin(Math.PI * t), b, -1, 1, []);
+    expect(r.C[2]).toBeCloseTo(1, 6);
+    expect(r.C[1]).toBeCloseTo(0, 6);
+  });
+});

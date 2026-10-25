@@ -103,3 +103,10 @@ describe('sampled cascade with impulses', () => {
     expect(c.v[50]).toBe(0);
   });
 });
+
+describe('TeX of signals', () => {
+  it('a formula keeps function names intact when t is replaced', () => {
+    const s = build({ kind: 'custom', p: {}, src: 'sqrt(t)*tan(2t)' } as never, [0, 5]);
+    expect(s.tex('τ')).toBe('sqrt(τ)*tan(2τ)');
+  });
+});

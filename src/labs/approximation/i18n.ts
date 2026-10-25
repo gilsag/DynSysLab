@@ -62,12 +62,12 @@ const D = {
     pt: 'Não ortogonais: todos os degraus se sobrepõem a partir do último instante. Geram o mesmo subespaço que os pulsos, então a aproximação é a mesma; os coeficientes são os incrementos.',
   },
   fTrig: {
-    es: 'Ortogonales sobre un período T = t₂ − t₁: las áreas positivas y negativas del producto se cancelan. Los coeficientes son los de Fourier, a₀/2, aₖ y bₖ.',
-    en: 'Orthogonal over one period T = t₂ − t₁: positive and negative areas of the product cancel. The coefficients are the Fourier ones, a₀/2, aₖ and bₖ.',
-    fr: 'Orthogonaux sur une période T = t₂ − t₁ : les aires positives et négatives du produit se compensent. Les coefficients sont ceux de Fourier, a₀/2, aₖ et bₖ.',
-    de: 'Orthogonal über eine Periode T = t₂ − t₁: Positive und negative Flächen des Produkts heben sich auf. Die Koeffizienten sind die Fourier-Koeffizienten a₀/2, aₖ und bₖ.',
-    it: 'Ortogonali su un periodo T = t₂ − t₁: le aree positive e negative del prodotto si compensano. I coefficienti sono quelli di Fourier, a₀/2, aₖ e bₖ.',
-    pt: 'Ortogonais sobre um período T = t₂ − t₁: as áreas positivas e negativas do produto se cancelam. Os coeficientes são os de Fourier, a₀/2, aₖ e bₖ.',
+    es: 'Ortogonales sobre un período T = t₂ − t₁: las áreas positivas y negativas del producto se cancelan. Los coeficientes son los de la serie de Fourier: el valor medio de u y los coeficientes aₖ y bₖ.',
+    en: 'Orthogonal over one period T = t₂ − t₁: positive and negative areas of the product cancel. The coefficients are those of the Fourier series: the mean value of u and the coefficients aₖ and bₖ.',
+    fr: 'Orthogonaux sur une période T = t₂ − t₁ : les aires positives et négatives du produit se compensent. Les coefficients sont ceux de la série de Fourier : la valeur moyenne de u et les coefficients aₖ et bₖ.',
+    de: 'Orthogonal über eine Periode T = t₂ − t₁: Positive und negative Flächen des Produkts heben sich auf. Die Koeffizienten sind die der Fourier-Reihe: der Mittelwert von u und die Koeffizienten aₖ und bₖ.',
+    it: 'Ortogonali su un periodo T = t₂ − t₁: le aree positive e negative del prodotto si compensano. I coefficienti sono quelli della serie di Fourier: il valore medio di u e i coefficienti aₖ e bₖ.',
+    pt: 'Ortogonais sobre um período T = t₂ − t₁: as áreas positivas e negativas do produto se cancelam. Os coeficientes são os da série de Fourier: o valor médio de u e os coeficientes aₖ e bₖ.',
   },
   fMono: {
     es: 'No ortogonales y casi linealmente dependientes para n grande: la matriz de Gram se vuelve mal condicionada y agregar un término cambia todos los coeficientes.',

@@ -1352,3 +1352,23 @@ input[type='radio'] {
     white-space: nowrap;
   }
 }
+
+/* block diagrams (shared/BlockDiagram.tsx) */
+.bd-scroll { overflow-x: auto; overflow-y: hidden; }
+.bd-svg { display: block; width: 100%; min-width: 520px; height: auto; max-height: 360px; }
+.bd-svg.chain { width: auto; max-width: 100%; min-width: 0; height: auto; margin: 0 auto; }
+.bd-w { fill: none; stroke: var(--text); stroke-width: 1.5; }
+.bd-w.thin { stroke-width: 1.2; }
+.bd-head { fill: var(--text); }
+.bd-sum { fill: var(--panel); stroke: var(--text); stroke-width: 1.5; }
+.bd-sign { font-size: 12px; fill: var(--text); font-weight: 700; }
+.bd-dot { fill: var(--text); }
+.bd-block rect { fill: var(--panel); stroke: var(--text); stroke-width: 1.5; }
+.bd-block text { font-size: 13px; fill: var(--text); font-family: KaTeX_Main, 'Times New Roman', serif; }
+.bd-block.int rect { fill: color-mix(in srgb, var(--accent) 12%, var(--panel)); stroke: var(--accent); }
+.bd-block.gain rect { stroke: var(--c-comp); }
+.bd-block.gain.out rect { stroke: var(--c-approx); }
+.bd-block.hl rect { fill: color-mix(in srgb, var(--c-approx) 14%, var(--panel)); stroke: var(--c-approx); stroke-width: 2; }
+.bd-lab { font-size: 13px; fill: var(--text); }
+.bd-lab.io { font-style: italic; font-weight: 600; }
+.bd-lab.state { font-size: 12px; fill: var(--accent); font-style: italic; }
