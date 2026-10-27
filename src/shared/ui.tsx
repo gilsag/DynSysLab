@@ -99,7 +99,7 @@ export function InfoTip({ text }: { text: string }) {
       className="infotip"
       tabIndex={0}
       role="button"
-      aria-label={text}
+      aria-label={text.replace(/\$/g, '')}
       onMouseEnter={show}
       onMouseLeave={hide}
       onFocus={() => { shownAt.current = Date.now(); show(); }}
@@ -116,7 +116,7 @@ export function InfoTip({ text }: { text: string }) {
       {pos &&
         createPortal(
           <div className={'tip-pop' + (pos.above ? ' above' : '')} style={{ left: pos.x, top: pos.y, maxWidth: Math.min(TIP_W, window.innerWidth - 16) }} role="tooltip">
-            {text}
+            <Rich text={text} />
           </div>,
           document.body,
         )}

@@ -139,5 +139,7 @@ export function horizon(z: number, wn: number): number {
   const slow = -p.p1[0];
   const ts = 4 / slow;
   if (p.kind === 'under') return Math.min(1.3 * ts, 5 * ((2 * Math.PI) / p.p1[1]));
-  return 1.3 * ts;
+  // with real poles the factor (1 + ωn t) or the second exponential delays settling beyond 4/σ:
+  // for ζ = 1 the 2 % band is reached at ωn t ≈ 5.83
+  return 1.3 * Math.max(ts, 6.5 / wn);
 }

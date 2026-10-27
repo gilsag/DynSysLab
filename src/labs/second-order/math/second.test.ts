@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formulas, fromPoles, freq, freqSpecs, impulse, measured, poles, rlc, rlcFor, step } from './second';
+import { formulas, fromPoles, freq, freqSpecs, horizon, impulse, measured, poles, rlc, rlcFor, step } from './second';
 
 describe('canonical second-order system', () => {
   it('poles for every damping and back', () => {
@@ -62,5 +62,18 @@ describe('10–90 % rise time', () => {
       const m = measured(z, 1, 0.02, '10-90', 30, 30000).tr;
       expect(Math.abs(f - m) / m).toBeLessThan(0.05);
     }
+  });
+});
+
+describe('settling with real poles', () => {
+  it('critically damped, ωn = 2: the 2 % band is reached at t ≈ 2.917 s within the horizon', () => {
+    const T = horizon(1, 2);
+    expect(T).toBeGreaterThan(2.917);
+    const m = measured(1, 2, 0.02, '0-100', 2 * T, 12000);
+    expect(m.ts).toBeCloseTo(2.917, 2);
+  });
+  it('overdamped ζ = 2: settling is measured too', () => {
+    const m = measured(2, 2, 0.02, '0-100', 2 * horizon(2, 2), 12000);
+    expect(Number.isFinite(m.ts)).toBe(true);
   });
 });

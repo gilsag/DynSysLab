@@ -79,7 +79,7 @@ export default function App() {
   const T = useMemo(() => Math.max(horizon(z, wn), frozen ? horizon(frozen.z, frozen.wn) : 0), [z, wn, frozen]);
   const ts = useMemo(() => Array.from({ length: N + 1 }, (_, k) => (T * k) / N), [T]);
   const f = formulas(z, wn, bandV, rise);
-  const m = useMemo(() => measured(z, wn, bandV, rise, Math.max(T, 1.5 * (Number.isFinite(f.ts) ? f.ts : 0)), 6000), [z, wn, bandV, rise, T, f.ts]);
+  const m = useMemo(() => measured(z, wn, bandV, rise, Math.max(2 * T, 1.5 * (Number.isFinite(f.ts) ? f.ts : 0)), 12000), [z, wn, bandV, rise, T, f.ts]);
   const fs = freqSpecs(z, wn);
 
   // ---------- time plot
@@ -229,9 +229,9 @@ export default function App() {
               <Tex block tex={poleTex} />
               <table className="so-table">
                 <tbody>
-                  <tr><td><Tex tex="\zeta = \cos\theta" /></td><td>{fmt(z, lang, 3)}</td><td><Tex tex="\omega_n = |s_{1,2}|" /></td><td>{fmt(wn, lang, 3)} rad/s</td></tr>
+                  <tr><td><Tex tex={z <= 1 ? '\\zeta = \\cos\\theta' : '\\zeta = \\tfrac{|s_1| + |s_2|}{2\\sqrt{s_1 s_2}}'} /></td><td>{fmt(z, lang, 3)}</td><td><Tex tex={z <= 1 ? '\\omega_n = |s_{1,2}|' : '\\omega_n = \\sqrt{s_1 s_2}'} /></td><td>{fmt(wn, lang, 3)} rad/s</td></tr>
                   <tr><td><Tex tex="\sigma = \zeta\omega_n" /></td><td>{fmt(z * wn, lang, 3)} 1/s</td><td><Tex tex="\omega_d = \omega_n\sqrt{1-\zeta^2}" /></td><td>{under ? `${fmt(wd, lang, 3)} rad/s` : '—'}</td></tr>
-                  <tr><td><Tex tex="\theta" /></td><td>{z <= 1 ? `${fmt((Math.acos(Math.min(1, z)) * 180) / Math.PI, lang, 3)}°` : '—'}</td><td><Tex tex="\tau = 1/\sigma" /></td><td>{z > 0 ? `${fmt(1 / (z * wn), lang, 3)} s` : '—'}</td></tr>
+                  <tr><td><Tex tex="\theta" /></td><td>{z <= 1 ? `${fmt((Math.acos(Math.min(1, z)) * 180) / Math.PI, lang, 3)}°` : '—'}</td><td><Tex tex={z <= 1 ? '\\tau = 1/\\sigma' : '\\tau = 1/|s_1|'} /></td><td>{z > 1 ? `${fmt(1 / (wn * (z - Math.sqrt(z * z - 1))), lang, 3)} s` : z > 0 ? `${fmt(1 / (z * wn), lang, 3)} s` : '—'}</td></tr>
                 </tbody>
               </table>
             </Card>
@@ -318,8 +318,8 @@ export default function App() {
                     </tr>
                     <tr>
                       <td>{t('phWn')}</td>
-                      <td>−90°</td>
-                      <td><Tex tex="\angle H(j\omega_n) = -\tfrac{\pi}{2}" /></td>
+                      <td>{z > 1e-9 ? '−90°' : t('phUndef')}</td>
+                      <td><Tex tex="\angle H(j\omega_n) = -\tfrac{\pi}{2}\ \ (\zeta > 0)" /></td>
                     </tr>
                   </tbody>
                 </table>
